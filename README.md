@@ -67,3 +67,26 @@ Open `frontend/index.html` in your favorite web browser or serve via any static 
 - **User Orders**: `GET /api/mongo/orders/user/{userId}`
 - **Customer Reviews**: `GET /api/mongo/reviews`
 - **Audit Activity Logs**: `GET /api/mongo/activity` / `POST /api/mongo/activity`
+
+---
+
+## ☁️ Deployment Guide
+
+### Option 1: Render / Railway (Free Cloud Web Service)
+1. Push your repository to GitHub.
+2. Sign up on [Render.com](https://render.com) or [Railway.app](https://railway.app).
+3. Create a **New Web Service** and select `Hasini2706/BiteBliss`.
+4. Choose **Docker** environment (or Maven runtime):
+   - **Build Command**: `cd backend && ./mvnw clean package -DskipTests`
+   - **Start Command**: `java -jar backend/target/backend-0.0.1-SNAPSHOT.jar`
+5. Set Environment Variables:
+   - `SPRING_DATA_MONGODB_URI`: `<Your MongoDB Atlas Connection URI>`
+   - `PORT`: `8080` (or `8081`)
+6. Deploy! Render will build and host the full-stack application with a public `https://...onrender.com` URL.
+
+### Option 2: Docker / Docker Compose
+Run locally or on any cloud VPS (AWS EC2 / DigitalOcean):
+```bash
+docker compose up -d --build
+```
+Access the application at `http://localhost:8081/index.html`.

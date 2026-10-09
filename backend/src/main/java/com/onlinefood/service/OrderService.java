@@ -52,6 +52,9 @@ public class OrderService {
     @Autowired
     private OrderStatusHistoryRepository orderStatusHistoryRepository;
 
+    @Autowired(required = false)
+    private com.onlinefood.mongo.service.MongoSyncService mongoSyncService;
+
     @Transactional(rollbackFor = Exception.class)
     public Order createOrder(OrderRequest orderRequest) {
         // 1. Validate User
@@ -180,6 +183,16 @@ public class OrderService {
         }
         
         notificationService.createNotification(order.getUser().getId(), "Your order has been placed successfully.");
+        
+        // Sync order document to MongoDB (Polyglot / NoSQL document store)
+        if (mongoSyncService != null) {
+            try {
+                mongoSyncService.syncOrderSnapshot(order);
+            } catch (Exception ex) {
+                // Log and keep relational flow safe
+            }
+        }
+
         return order;
     }
 

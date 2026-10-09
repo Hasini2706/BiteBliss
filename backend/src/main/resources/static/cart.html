@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Food Cart | BiteBliss</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Shared Main Stylesheet -->
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        body {
+            padding-top: 76px;
+            padding-bottom: 40px;
+            background: #f8fafc;
+            font-family: 'Outfit', 'Inter', sans-serif;
+        }
+        /* Modern Clean Empty Cart Styling */
+        .modern-empty-cart-section {
+            max-width: 980px;
+            margin: 40px auto;
+            text-align: center;
+        }
+        .empty-cart-hero-card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 20px;
+            padding: 48px 32px;
+            box-shadow: 0 4px 20px -4px rgba(15, 23, 42, 0.05);
+            margin-bottom: 36px;
+        }
+        .empty-cart-graphic-box {
+            width: 110px;
+            height: 110px;
+            background: linear-gradient(135deg, #fff0f1 0%, #ffe4e6 100%);
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 24px;
+            box-shadow: 0 8px 24px -4px rgba(255, 71, 87, 0.25);
+        }
+        .empty-cart-main-title {
+            font-size: 28px;
+            font-weight: 800;
+            letter-spacing: -0.4px;
+            color: #0f172a;
+            margin-bottom: 10px;
+        }
+        .empty-cart-lead {
+            font-size: 15px;
+            color: #64748b;
+            max-width: 520px;
+            margin: 0 auto 28px auto;
+            line-height: 1.5;
+        }
+        .btn-foodie-gradient {
+            background: linear-gradient(135deg, #ff4757 0%, #ff6b4a 100%);
+            color: #ffffff;
+            font-weight: 700;
+            padding: 12px 32px;
+            border-radius: 30px;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 14px rgba(255, 71, 87, 0.35);
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }
+        .btn-foodie-gradient:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 71, 87, 0.45);
+            color: #ffffff;
+        }
+        /* Popular Categories Chips */
+        .category-pill-row {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 32px;
+        }
+        .cat-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 18px;
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 30px;
+            color: #334155;
+            font-weight: 600;
+            font-size: 13.5px;
+            text-decoration: none;
+            transition: all 0.15s ease;
+        }
+        .cat-chip:hover {
+            border-color: #ff4757;
+            color: #ff4757;
+            background: #fff0f1;
+            transform: translateY(-2px);
+        }
+        /* Quick Add Trending Dishes */
+        .trending-dishes-box {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 20px;
+            padding: 32px;
+            box-shadow: 0 4px 20px -4px rgba(15, 23, 42, 0.05);
+            margin-bottom: 32px;
+            text-align: left;
+        }
+        .trending-card {
+            background: #ffffff;
+            border: 1px solid #f1f5f9;
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: 0 2px 6px rgba(15, 23, 42, 0.04);
+            transition: all 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+        .trending-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 18px -4px rgba(15, 23, 42, 0.08);
+            border-color: #ffd8dc;
+        }
+        .trending-card-img {
+            width: 100%;
+            height: 140px;
+            object-fit: cover;
+        }
+        .trending-card-body {
+            padding: 14px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+        .trending-dish-title {
+            font-size: 14.5px;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .trending-dish-price {
+            font-size: 15px;
+            font-weight: 800;
+            color: #0f172a;
+        }
+        .btn-quick-add {
+            background: #fff0f1;
+            color: #ff4757;
+            border: 1px solid #ffccd0;
+            font-weight: 700;
+            font-size: 12.5px;
+            padding: 5px 14px;
+            border-radius: 20px;
+            transition: all 0.15s;
+            cursor: pointer;
+        }
+        .btn-quick-add:hover {
+            background: #ff4757;
+            color: #ffffff;
+            border-color: #ff4757;
+        }
+        /* Trust Badges Strip */
+        .trust-strip {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            padding: 20px;
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 16px;
+        }
+        .trust-strip-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-align: left;
+        }
+        .trust-strip-icon {
+            font-size: 24px;
+        }
+        @media (max-width: 768px) {
+            .trust-strip {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body class="foodie-page-wrapper">
+
+    <!-- BiteBliss Clean Customer Navbar -->
+    <nav class="navbar navbar-expand-lg foodie-navbar fixed-top">
+        <div class="container d-flex align-items-center justify-content-between">
+            <!-- Brand Logo -->
+            <a class="foodie-brand" href="index.html">
+                <div class="foodie-logo-icon">🍕</div>
+                <span>BiteBliss</span>
+            </a>
+
+            <!-- Center Navigation Links -->
+            <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+                <ul class="navbar-nav gap-2 align-items-center">
+                    <li class="nav-item">
+                        <a class="foodie-nav-link" href="index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="foodie-nav-link" href="menu.html">Menu</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="foodie-nav-link active" href="cart.html">Cart & Offers</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="foodie-nav-link" href="orders.html">Track Order</a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Right Controls: Search, Cart Badge, Profile -->
+            <div class="d-flex align-items-center gap-3">
+                <a href="menu.html" class="foodie-circle-btn" title="Search Dishes">
+                    🔍
+                </a>
+                <a href="cart.html" class="foodie-circle-btn" title="View Cart">
+                    🛒
+                    <span class="foodie-badge" id="nav-cart-badge">0</span>
+                </a>
+                <div class="dropdown">
+                    <a href="#" class="foodie-circle-btn" id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false" title="Account">
+                        👤
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0 rounded-3 mt-2" aria-labelledby="profileDropdown">
+                        <li id="dropdown-user-name" class="dropdown-header fw-bold text-dark">Guest</li>
+                        <li><a class="dropdown-item" href="profile.html">My Profile & Addresses</a></li>
+                        <li><a class="dropdown-item" href="orders.html">My Orders</a></li>
+                        <li id="admin-link-item" class="d-none"><a class="dropdown-item text-danger fw-bold" href="admin.html">⚙️ Admin Dashboard</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li id="auth-action-btn"><a class="dropdown-item text-primary fw-bold" href="login.html">Login / Register</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Cart Container -->
+    <div class="container" id="cart-container">
+
+        <!-- =========================================================
+             1. MODERN CLEAN EMPTY CART STATE
+             ========================================================= -->
+        <div id="cart-empty-state" class="modern-empty-cart-section">
+            <!-- Hero Empty Card -->
+            <div class="empty-cart-hero-card">
+                <div class="empty-cart-graphic-box">
+                    <!-- Shopping Bag with Sparkles Icon -->
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#ff4757" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                        <path d="M16 10a4 4 0 0 1-8 0"></path>
+                    </svg>
+                </div>
+                <h1 class="empty-cart-main-title">Your Food Cart is Empty</h1>
+                <p class="empty-cart-lead">
+                    Good food is always just around the corner. Browse 100+ delicacies from top master kitchens and treat your tastebuds!
+                </p>
+                <a href="menu.html" class="btn-foodie-gradient">
+                    <span>🍽️</span> Explore Full Menu & Dishes →
+                </a>
+            </div>
+
+            <!-- Popular Cravings Filter Chips -->
+            <div class="mb-4">
+                <h6 class="fw-bold text-dark mb-3">Popular Cravings Near You:</h6>
+                <div class="category-pill-row">
+                    <a href="menu.html?category=Biryani%20%26%20Rice" class="cat-chip">🍗 Biryani & Rice</a>
+                    <a href="menu.html?category=Pizzas" class="cat-chip">🍕 Cheesy Pizzas</a>
+                    <a href="menu.html?category=Burgers%20%26%20Wraps" class="cat-chip">🍔 Juicy Burgers</a>
+                    <a href="menu.html?category=North%20Indian" class="cat-chip">🥘 North Indian Curries</a>
+                    <a href="menu.html?category=Chinese%20%26%20Asian" class="cat-chip">🥢 Hakka Noodles & Dimsums</a>
+                    <a href="menu.html?category=Desserts" class="cat-chip">🍰 Gourmet Desserts</a>
+                </div>
+            </div>
+
+            <!-- Recommended Dishes Quick-Add Section -->
+            <div class="trending-dishes-box">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div>
+                        <h5 class="fw-bold mb-0 text-dark">Trending Dishes to Quick-Add</h5>
+                        <small class="text-muted">Customer favorites prepared fresh right now</small>
+                    </div>
+                    <a href="menu.html" class="text-danger fw-bold small text-decoration-none">View All ➔</a>
+                </div>
+
+                <div class="row g-3">
+                    <!-- Quick Dish 1 -->
+                    <div class="col-md-3 col-sm-6">
+                        <div class="trending-card">
+                            <img src="https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=800&q=80" alt="Hyderabadi Chicken Dum Biryani" class="trending-card-img" loading="lazy">
+                            <div class="trending-card-body">
+                                <div class="d-flex align-items-center gap-1 mb-1">
+                                    <span class="nonveg-badge" style="width:11px; height:11px;"></span>
+                                    <small class="text-warning fw-bold">⭐ 4.8</small>
+                                </div>
+                                <div class="trending-dish-title" title="Hyderabadi Chicken Dum Biryani">Hyderabadi Chicken Dum Biryani</div>
+                                <div class="d-flex justify-content-between align-items-center mt-auto pt-2">
+                                    <span class="trending-dish-price">₹280</span>
+                                    <button class="btn-quick-add" onclick="quickAddToCart(1, 'Hyderabadi Chicken Dum Biryani', 280, 'https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=800&q=80', false)">+ Add</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Dish 2 -->
+                    <div class="col-md-3 col-sm-6">
+                        <div class="trending-card">
+                            <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?w=800&q=80" alt="Farmhouse Veggie Supreme Pizza" class="trending-card-img" loading="lazy">
+                            <div class="trending-card-body">
+                                <div class="d-flex align-items-center gap-1 mb-1">
+                                    <span class="veg-badge" style="width:11px; height:11px;"></span>
+                                    <small class="text-warning fw-bold">⭐ 4.6</small>
+                                </div>
+                                <div class="trending-dish-title" title="Farmhouse Veggie Supreme Pizza">Farmhouse Veggie Supreme Pizza</div>
+                                <div class="d-flex justify-content-between align-items-center mt-auto pt-2">
+                                    <span class="trending-dish-price">₹320</span>
+                                    <button class="btn-quick-add" onclick="quickAddToCart(2, 'Farmhouse Veggie Supreme Pizza', 320, 'https://images.unsplash.com/photo-1513104890138-7c749659a591?w=800&q=80', true)">+ Add</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Dish 3 -->
+                    <div class="col-md-3 col-sm-6">
+                        <div class="trending-card">
+                            <img src="https://images.unsplash.com/photo-1586190848861-99aa4a171e90?w=800&q=80" alt="Gourmet Double Cheeseburger" class="trending-card-img" loading="lazy">
+                            <div class="trending-card-body">
+                                <div class="d-flex align-items-center gap-1 mb-1">
+                                    <span class="nonveg-badge" style="width:11px; height:11px;"></span>
+                                    <small class="text-warning fw-bold">⭐ 4.8</small>
+                                </div>
+                                <div class="trending-dish-title" title="Gourmet Double Cheeseburger">Gourmet Double Cheeseburger</div>
+                                <div class="d-flex justify-content-between align-items-center mt-auto pt-2">
+                                    <span class="trending-dish-price">₹240</span>
+                                    <button class="btn-quick-add" onclick="quickAddToCart(3, 'Gourmet Double Cheeseburger', 240, 'https://images.unsplash.com/photo-1586190848861-99aa4a171e90?w=800&q=80', false)">+ Add</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Dish 4 -->
+                    <div class="col-md-3 col-sm-6">
+                        <div class="trending-card">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/b/b4/Paneertikkaindia.jpg" alt="Tandoori Paneer Tikka" class="trending-card-img" loading="lazy">
+                            <div class="trending-card-body">
+                                <div class="d-flex align-items-center gap-1 mb-1">
+                                    <span class="veg-badge" style="width:11px; height:11px;"></span>
+                                    <small class="text-warning fw-bold">⭐ 4.8</small>
+                                </div>
+                                <div class="trending-dish-title" title="Tandoori Paneer Tikka">Tandoori Paneer Tikka</div>
+                                <div class="d-flex justify-content-between align-items-center mt-auto pt-2">
+                                    <span class="trending-dish-price">₹260</span>
+                                    <button class="btn-quick-add" onclick="quickAddToCart(4, 'Tandoori Paneer Tikka', 260, 'https://upload.wikimedia.org/wikipedia/commons/b/b4/Paneertikkaindia.jpg', true)">+ Add</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Trust Badges Strip -->
+            <div class="trust-strip">
+                <div class="trust-strip-item">
+                    <span class="trust-strip-icon">⚡</span>
+                    <div>
+                        <div class="fw-bold small text-dark">25 Min Delivery</div>
+                        <small class="text-muted">Hot & fresh to doorstep</small>
+                    </div>
+                </div>
+                <div class="trust-strip-item">
+                    <span class="trust-strip-icon">🛡️</span>
+                    <div>
+                        <div class="fw-bold small text-dark">100% Hygienic</div>
+                        <small class="text-muted">Safe sanitized kitchens</small>
+                    </div>
+                </div>
+                <div class="trust-strip-item">
+                    <span class="trust-strip-icon">🏷️</span>
+                    <div>
+                        <div class="fw-bold small text-dark">Best Offers</div>
+                        <small class="text-muted">Save with discount codes</small>
+                    </div>
+                </div>
+                <div class="trust-strip-item">
+                    <span class="trust-strip-icon">⭐</span>
+                    <div>
+                        <div class="fw-bold small text-dark">4.8+ Master Chefs</div>
+                        <small class="text-muted">Top multi-cuisine recipes</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- =========================================================
+             2. ACTIVE CART STATE (When Items Are in Cart)
+             ========================================================= -->
+        <div id="cart-full-state" class="my-4 d-none">
+            <div class="d-flex align-items-center justify-content-between mb-4">
+                <div>
+                    <h3 class="fw-bold text-dark mb-1">Your Food Cart</h3>
+                    <p class="text-muted mb-0">Review items, apply coupons, and proceed to checkout.</p>
+                </div>
+                <a href="menu.html" class="btn btn-sm btn-outline-danger rounded-pill px-3 fw-bold">+ Add More Dishes</a>
+            </div>
+
+            <div class="row g-4">
+                <!-- Left: Cart Items List -->
+                <div class="col-lg-7">
+                    <div class="card border-0 shadow-sm rounded-4 p-4 bg-white mb-4">
+                        <!-- Free Delivery Progress Meter -->
+                        <div class="mb-4 p-3 rounded-3" style="background: #fdfaf6; border: 1px solid #f9edd9;">
+                            <div class="d-flex justify-content-between small fw-bold mb-1" id="free-del-text">
+                                Add ₹200 more for <strong>FREE Delivery!</strong>
+                            </div>
+                            <div class="progress" style="height: 6px;">
+                                <div class="progress-bar bg-warning" id="free-del-progress" role="progressbar" style="width: 50%;"></div>
+                            </div>
+                        </div>
+
+                        <!-- Group Order & Split Bill Banner -->
+                        <div class="group-order-banner p-3 p-md-4 mb-4 text-white">
+                            <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
+                                <div class="d-flex align-items-center gap-3">
+                                    <div class="rounded-circle d-flex align-items-center justify-content-center bg-white bg-opacity-25" style="width: 48px; height: 48px; font-size: 1.6rem; flex-shrink: 0;">
+                                        👥
+                                    </div>
+                                    <div>
+                                        <div class="d-flex align-items-center gap-2 mb-1">
+                                            <span class="badge bg-warning text-dark fw-bold rounded-pill px-2 py-0" style="font-size: 0.72rem;">HOT FEATURE</span>
+                                            <h6 class="fw-bold mb-0 text-white">Ordering with Friends? Split the Bill!</h6>
+                                        </div>
+                                        <small class="text-white-50">Assign dishes to friends, split fees/discounts proportionally, and get live UPI QR codes.</small>
+                                    </div>
+                                </div>
+                                <button class="btn btn-light text-primary fw-bold rounded-pill px-4 py-2 shadow-sm" onclick="openGroupOrderModal()" id="group-order-toggle-btn">
+                                    👥 Start Group Split
+                                </button>
+                            </div>
+                            <!-- Active Group Summary Strip -->
+                            <div id="active-group-summary-strip" class="d-none mt-3 pt-3 border-top border-white border-opacity-25 d-flex flex-wrap justify-content-between align-items-center gap-2">
+                                <div class="d-flex align-items-center gap-2 flex-wrap">
+                                    <span class="badge bg-white text-dark fw-bold rounded-pill px-3 py-2" id="group-room-code-badge">ROOM #FOOD-8421</span>
+                                    <span class="small text-white" id="group-members-count-badge">3 Friends in room</span>
+                                </div>
+                                <div class="d-flex gap-2">
+                                    <button class="btn btn-warning text-dark btn-sm rounded-pill px-3 py-1 fw-bold" onclick="openBillSplitModal()">
+                                        📊 View Split & UPI QRs
+                                    </button>
+                                    <button class="btn btn-outline-light btn-sm rounded-pill px-3 py-1" onclick="leaveGroupOrder()">
+                                        Leave Group
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h5 class="fw-bold mb-0 text-dark">Order Items</h5>
+                            <button type="button" class="btn btn-sm btn-outline-danger rounded-pill px-3 fw-bold d-flex align-items-center gap-1 shadow-2xs" onclick="clearEntireCart()" title="Remove all items from cart">
+                                <span>🗑️</span> Clear Cart
+                            </button>
+                        </div>
+                        <div id="cart-items-list">
+                            <!-- Injected by script.js -->
+                        </div>
+
+                        <!-- Special Cooking Instructions -->
+                        <div class="mt-4">
+                            <label class="form-label small fw-bold text-muted">Special Cooking Instructions (Optional)</label>
+                            <input type="text" class="form-control rounded-3" placeholder="e.g. Less spicy, Extra tissue, Do not ring doorbell...">
+                        </div>
+                    </div>
+
+                    <!-- Available Offers & Coupons -->
+                    <div class="card border-0 shadow-sm rounded-4 p-4 bg-white mb-4">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h5 class="fw-bold mb-0 text-dark">🏷️ Available Offers & Coupons</h5>
+                            <span class="small text-muted">Instant discount on your bill</span>
+                        </div>
+
+                        <!-- Manual Coupon Code Input -->
+                        <div class="input-group mb-2">
+                            <input type="text" id="cart-coupon-input" class="form-control" placeholder="Enter coupon code (e.g. SWIGGY50)" style="text-transform: uppercase;">
+                            <button class="btn btn-foodie-explore px-4" type="button" onclick="applyCouponFromInput('cart-coupon-input')">Apply Code</button>
+                        </div>
+                        <div id="cart-coupon-feedback" class="small mb-3"></div>
+
+                        <!-- Active Applied Coupon Banner -->
+                        <div id="cart-applied-coupon-banner" class="d-none alert alert-success d-flex justify-content-between align-items-center p-3 rounded-3 mb-3">
+                            <div>
+                                <span class="fw-bold text-success" id="cart-applied-banner-text">🎉 Coupon applied!</span>
+                                <div class="small text-muted" id="cart-applied-banner-sub">Discount applied to your order</div>
+                            </div>
+                            <button class="btn btn-sm btn-outline-danger rounded-pill px-3 fw-bold" onclick="removeCoupon()">Remove</button>
+                        </div>
+
+                        <!-- Available Coupons List -->
+                        <div class="row g-3" id="cart-coupons-list">
+                            <!-- Injected dynamically by script.js -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: Bill Details Card -->
+                <div class="col-lg-5">
+                    <div class="card border-0 shadow-sm rounded-4 p-4 bg-white sticky-top" style="top: 96px;">
+                        <h5 class="fw-bold mb-3 text-dark">Bill Details</h5>
+                        
+                        <div class="bill-row">
+                            <span class="text-secondary">Item Total</span>
+                            <span class="fw-bold text-dark" id="cart-item-total">₹0</span>
+                        </div>
+                        <div class="bill-row">
+                            <span class="text-secondary">Delivery Partner Fee</span>
+                            <span class="fw-bold text-dark" id="cart-delivery-fee">₹40</span>
+                        </div>
+                        <div class="bill-row">
+                            <span class="text-secondary">Platform Fee</span>
+                            <span class="fw-bold text-dark" id="cart-platform-fee">₹5</span>
+                        </div>
+                        <div class="bill-row">
+                            <span class="text-secondary">Govt Taxes & Charges (5%)</span>
+                            <span class="fw-bold text-dark" id="cart-taxes">₹0</span>
+                        </div>
+                        <div class="bill-row d-none text-success fw-bold" id="cart-discount-row">
+                            <span id="cart-applied-coupon-label">Coupon Discount</span>
+                            <span id="cart-discount-amount">-₹0</span>
+                        </div>
+
+                        <div class="bill-row total border-top pt-3 mt-3">
+                            <span class="h5 fw-bold text-dark mb-0">TO PAY</span>
+                            <span class="h4 fw-bold text-danger mb-0" id="cart-grand-total">₹0</span>
+                        </div>
+
+                        <div class="alert alert-success d-flex align-items-center py-2 px-3 mt-3 mb-4 rounded-3 small" id="cart-savings-tip">
+                            <span>💡</span>
+                            <span class="ms-2" id="cart-savings-tip-text">Apply a coupon above to save on your order!</span>
+                        </div>
+
+                        <a href="checkout.html" class="btn btn-foodie-gradient w-100 py-3 text-center justify-content-center" id="checkout-btn">
+                            Proceed to Checkout ➔
+                        </a>
+
+                        <button type="button" class="btn btn-outline-primary w-100 py-2 rounded-pill mt-2 fw-bold d-flex align-items-center justify-content-center gap-2 shadow-sm" onclick="openBillSplitModal()">
+                            <span>👥</span> Split Bill with Friends
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ========================================== -->
+    <!-- MODAL 1: Group Order Setup & Member Manager -->
+    <!-- ========================================== -->
+    <div class="modal fade" id="groupOrderModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content rounded-4 border-0 shadow-lg overflow-hidden">
+                <div class="p-4 text-white" style="background: linear-gradient(135deg, #4338ca 0%, #6366f1 50%, #8b5cf6 100%);">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <span class="badge bg-white bg-opacity-25 rounded-pill px-3 py-1 mb-2">🎉 Party & Group Ordering</span>
+                            <h4 class="fw-bold mb-1 text-white">Order with Friends</h4>
+                            <p class="text-white-50 small mb-0">Collaborate, assign individual dishes, and auto-split the bill.</p>
+                        </div>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                    </div>
+                </div>
+                <div class="modal-body p-4">
+                    <!-- Room Code Box -->
+                    <div class="bg-light p-3 rounded-3 border mb-3 d-flex justify-content-between align-items-center">
+                        <div>
+                            <small class="text-muted text-uppercase fw-bold d-block" style="font-size: 0.75rem;">Group Room Code</small>
+                            <span class="fs-5 fw-bolder text-primary font-monospace" id="group-room-code-display">FOOD-8421</span>
+                        </div>
+                        <button class="btn btn-sm btn-outline-primary rounded-pill px-3 fw-bold" onclick="copyGroupRoomCode()">
+                            📋 Copy Code
+                        </button>
+                    </div>
+
+                    <!-- Members List -->
+                    <h6 class="fw-bold mb-2 text-dark">Friends in this Order:</h6>
+                    <div id="group-members-list-container" class="d-flex flex-column gap-2 mb-3">
+                        <!-- Injected by script.js -->
+                    </div>
+
+                    <!-- Add Friend Input -->
+                    <div class="input-group mb-3">
+                        <input type="text" id="new-member-name-input" class="form-control" placeholder="Friend's Name (e.g. Rahul, Priya)...">
+                        <button class="btn btn-primary px-3 fw-bold" type="button" onclick="addGroupMemberFromInput()">+ Add Friend</button>
+                    </div>
+
+                    <div class="alert alert-info py-2 px-3 rounded-3 small mb-0">
+                        💡 <strong>How it works:</strong> Once started, you can assign each dish to specific friends in the cart. BiteBliss will calculate exact shares, taxes, and generate UPI QR codes!
+                    </div>
+                </div>
+                <div class="modal-footer bg-light border-0 p-3">
+                    <button type="button" class="btn btn-secondary rounded-pill px-4" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary rounded-pill px-4 fw-bold" onclick="startOrUpdateGroupOrder()">
+                        ✓ Save & Apply to Cart
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- MODAL 2: Interactive Smart Bill Splitter -->
+    <!-- ========================================== -->
+    <div class="modal fade" id="billSplitModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content rounded-4 border-0 shadow-lg overflow-hidden">
+                <div class="p-4 text-white" style="background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #4338ca 100%);">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <div class="d-flex align-items-center gap-2 mb-1">
+                                <span class="badge bg-warning text-dark fw-bold rounded-pill">⚡ Live Smart Splitter</span>
+                                <span class="badge bg-white bg-opacity-25 text-white rounded-pill font-monospace" id="split-modal-room-badge">ROOM #FOOD-8421</span>
+                            </div>
+                            <h4 class="fw-bold mb-0 text-white">Friend-by-Friend Bill Breakdown</h4>
+                            <small class="text-white-50">Taxes, delivery, and coupon discounts are proportionally distributed.</small>
+                        </div>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                    </div>
+                </div>
+
+                <div class="modal-body p-4">
+                    <!-- Split Mode Pills & WhatsApp Button -->
+                    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-4 pb-3 border-bottom">
+                        <div class="d-flex gap-2">
+                            <button class="split-pill-tab active" id="tab-split-itemized" onclick="switchSplitMode('itemized')">
+                                🍕 Itemized (Pay for what you ate)
+                            </button>
+                            <button class="split-pill-tab" id="tab-split-equal" onclick="switchSplitMode('equal')">
+                                ⚖️ Split Equally (Fair Share)
+                            </button>
+                        </div>
+                        <button class="btn btn-success rounded-pill px-3 py-2 fw-bold d-flex align-items-center gap-2 shadow-sm" onclick="shareSplitWhatsApp()">
+                            <span>📲</span> Share on WhatsApp
+                        </button>
+                    </div>
+
+                    <!-- Participating Friends Selector Strip & Quick Add Friend -->
+                    <div class="p-3 bg-light rounded-3 border mb-4">
+                        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-2">
+                            <div>
+                                <strong class="text-dark small d-block">👥 Participating in this Split:</strong>
+                                <small class="text-muted" style="font-size:0.75rem;">Select which friends share this bill. Click to include or exclude.</small>
+                            </div>
+                            <button type="button" class="btn btn-sm btn-outline-primary rounded-pill px-3 fw-bold" onclick="toggleSplitQuickAddFriend()">
+                                + Add New Friend
+                            </button>
+                        </div>
+
+                        <!-- Checkbox Chips Container -->
+                        <div class="d-flex flex-wrap gap-2 align-items-center" id="split-participants-chips">
+                            <!-- Injected dynamically by script.js -->
+                        </div>
+
+                        <!-- Quick Add Friend Inline Form -->
+                        <div id="split-quick-add-form" class="mt-2 pt-2 border-top d-none">
+                            <div class="input-group input-group-sm" style="max-width: 340px;">
+                                <input type="text" id="split-quick-add-input" class="form-control rounded-start-pill" placeholder="New friend's name (e.g. Rohan)..." onkeydown="if(event.key==='Enter') addSplitFriendQuick();">
+                                <button class="btn btn-primary fw-bold rounded-end-pill px-3" type="button" onclick="addSplitFriendQuick()">+ Add</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Split Cards Grid -->
+                    <div class="row g-3" id="friend-split-cards-container">
+                        <!-- Injected by script.js -->
+                    </div>
+
+                    <!-- Overall Reconciliation Alert -->
+                    <div class="bg-light p-3 rounded-3 border mt-4 d-flex justify-content-between align-items-center flex-wrap gap-2">
+                        <div>
+                            <span class="text-muted small d-block">Grand Total Checked:</span>
+                            <strong class="text-dark fs-6" id="split-reconciled-total">Total Bill: ₹0</strong>
+                        </div>
+                        <div>
+                            <span class="badge bg-success-subtle text-success border border-success-subtle px-3 py-2 fw-bold rounded-pill">
+                                100% Mathematically Reconciled ✓
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer bg-light border-0 p-3">
+                    <button type="button" class="btn btn-outline-secondary rounded-pill px-4" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary rounded-pill px-4 fw-bold" onclick="openGroupOrderModal()">
+                        ⚙️ Manage Members
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- MODAL 3: Dynamic Live UPI QR Code Modal   -->
+    <!-- ========================================== -->
+    <div class="modal fade" id="friendUpiQrModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" style="max-width: 420px;">
+            <div class="modal-content rounded-4 border-0 shadow-lg text-center overflow-hidden">
+                <div class="p-3 bg-primary text-white position-relative">
+                    <h5 class="fw-bold mb-0 text-white">📱 UPI Payment QR</h5>
+                    <button type="button" class="btn-close btn-close-white position-absolute top-50 end-0 translate-middle-y me-3" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <div class="mb-2">
+                        <span class="fs-1 d-inline-block mb-1" id="qr-modal-avatar">🚴</span>
+                        <h5 class="fw-bold mb-0 text-dark" id="qr-modal-friend-name">Rahul's Share</h5>
+                        <small class="text-muted">Scan with Google Pay, PhonePe, or Paytm</small>
+                    </div>
+
+                    <div class="my-3 display-6 fw-bolder text-primary" id="qr-modal-amount">
+                        ₹0
+                    </div>
+
+                    <!-- QR Code Canvas / Image Container -->
+                    <div class="p-3 bg-white border rounded-4 shadow-sm d-inline-block mx-auto mb-3" style="width: 220px; height: 220px;">
+                        <img id="qr-modal-image" src="" alt="UPI QR Code" style="width: 100%; height: 100%; object-fit: contain;">
+                    </div>
+
+                    <!-- Supported UPI Apps Bar -->
+                    <div class="d-flex justify-content-center gap-2 align-items-center mb-3 text-muted small fw-semibold">
+                        <span>Google Pay</span> • <span>PhonePe</span> • <span>Paytm</span> • <span>BHIM</span>
+                    </div>
+
+                    <!-- Copy UPI ID -->
+                    <div class="input-group mb-2">
+                        <input type="text" class="form-control text-center font-monospace small bg-light" id="qr-modal-upi-id" value="biteblisspay@okhdfcbank" readonly>
+                        <button class="btn btn-outline-secondary btn-sm px-3" onclick="copyUpiId()">Copy</button>
+                    </div>
+
+                    <small class="text-muted d-block mt-2">
+                        💡 Once scanned, the exact split amount and note are pre-filled in your UPI app!
+                    </small>
+                </div>
+                <div class="modal-footer bg-light border-0 p-3 justify-content-center">
+                    <button type="button" class="btn btn-secondary rounded-pill px-4" data-bs-dismiss="modal">Done</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating BiteBliss AI Button -->
+    <div class="floating-foodie-ai-btn" onclick="toggleFoodieAIModal()" id="foodie-ai-trigger" title="Ask BiteBliss AI for recommendations!">
+        <span style="font-size: 1.25rem;">✨</span>
+        <span>BiteBliss AI</span>
+    </div>
+
+    <!-- Bootstrap 5 Bundle JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- BiteBliss Core Customer JS -->
+    <script src="js/script.js"></script>
+</body>
+</html>

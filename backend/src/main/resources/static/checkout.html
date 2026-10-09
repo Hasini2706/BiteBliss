@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure Checkout | BiteBliss</title>
+    <meta name="description" content="Complete your order securely with UPI, Credit/Debit Cards, Net Banking, or Cash on Delivery.">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        body {
+            padding-top: 76px;
+            padding-bottom: 0;
+            background: #fff9f5;
+        }
+    </style>
+</head>
+<body class="foodie-page-wrapper">
+    <!-- BiteBliss Navbar -->
+    <nav class="navbar navbar-expand-lg foodie-navbar fixed-top">
+        <div class="container d-flex align-items-center justify-content-between">
+            <!-- Brand Logo -->
+            <a class="foodie-brand" href="index.html">
+                <div class="foodie-logo-icon">🍕</div>
+                <span>BiteBliss</span>
+            </a>
+
+            <!-- Center Navigation Links -->
+            <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+                <ul class="navbar-nav gap-2 align-items-center">
+                    <li class="nav-item">
+                        <a class="foodie-nav-link" href="index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="foodie-nav-link" href="menu.html">Menu</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="foodie-nav-link" href="cart.html">Offers</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="foodie-nav-link" href="orders.html">Track Order</a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Right Controls -->
+            <div class="d-flex align-items-center gap-3">
+                <a href="menu.html" class="foodie-circle-btn" title="Search Dishes">
+                    🔍
+                </a>
+                <a href="cart.html" class="foodie-circle-btn" title="View Cart">
+                    🛒
+                    <span class="foodie-badge" id="nav-cart-badge">0</span>
+                </a>
+                <div class="dropdown">
+                    <a href="#" class="foodie-circle-btn" id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false" title="Account">
+                        👤
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0 rounded-3 mt-2" aria-labelledby="profileDropdown">
+                        <li id="dropdown-user-name" class="dropdown-header fw-bold text-dark">Guest</li>
+                        <li><a class="dropdown-item" href="profile.html">My Profile & Addresses</a></li>
+                        <li><a class="dropdown-item" href="orders.html">My Orders</a></li>
+                        <li id="admin-link-item" class="d-none"><a class="dropdown-item text-danger fw-bold" href="admin.html">⚙️ Admin Dashboard</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li id="auth-action-btn"><a class="dropdown-item text-primary fw-bold" href="login.html">Login / Register</a></li>
+                    </ul>
+                </div>
+                <ul class="d-none" id="auth-links"></ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- CHECKOUT CONTAINER -->
+    <div class="container my-5 pt-3" id="checkout-container">
+        <div class="d-flex align-items-center justify-content-between mb-4">
+            <div>
+                <h3 class="fw-bold mb-0">Review & Payment</h3>
+                <small class="text-muted">Fast & encrypted checkout powered by BiteBliss</small>
+            </div>
+            <a href="cart.html" class="btn btn-sm btn-outline-secondary rounded-pill px-3">← Back to Cart</a>
+        </div>
+
+        <div class="row g-4">
+            <!-- Left Column: Address, Payment, Coupons -->
+            <div class="col-lg-7">
+                <!-- 1. Delivery Address -->
+                <div class="card border-0 shadow-sm rounded-4 p-4 bg-white mb-4">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div class="d-flex align-items-center gap-2">
+                            <span class="badge bg-danger rounded-circle p-2" style="width: 28px; height: 28px; display: inline-flex; align-items: center; justify-content: center;">1</span>
+                            <h5 class="fw-bold mb-0">Delivery Address</h5>
+                        </div>
+                        <button class="btn btn-outline-custom btn-sm rounded-pill px-3" data-bs-toggle="modal" data-bs-target="#addAddressModal">
+                            + Add New Address
+                        </button>
+                    </div>
+
+                    <div id="address-cards-container">
+                        <!-- Injected by script.js -->
+                    </div>
+                </div>
+
+                <!-- 2. Choose Payment Method (UPI, Cards, Net Banking, COD) -->
+                <div class="card border-0 shadow-sm rounded-4 p-4 bg-white mb-4">
+                    <div class="d-flex align-items-center gap-2 mb-3">
+                        <span class="badge bg-danger rounded-circle p-2" style="width: 28px; height: 28px; display: inline-flex; align-items: center; justify-content: center;">2</span>
+                        <h5 class="fw-bold mb-0">Payment Method</h5>
+                    </div>
+
+                    <!-- Option 1: Instant UPI -->
+                    <div class="payment-option-card mb-2 p-3 rounded-3 border">
+                        <div class="form-check d-flex align-items-center justify-content-between">
+                            <div>
+                                <input class="form-check-input" type="radio" name="paymentType" id="pay-upi" value="UPI" checked>
+                                <label class="form-check-label fw-bold ms-2" for="pay-upi">
+                                    Instant UPI / QR Code
+                                </label>
+                                <div class="small text-muted ms-4">Google Pay, PhonePe, Paytm, BHIM</div>
+                            </div>
+                            <span style="font-size: 1.5rem;">📱</span>
+                        </div>
+                    </div>
+
+                    <!-- Option 2: Credit / Debit Card -->
+                    <div class="payment-option-card mb-2 p-3 rounded-3 border">
+                        <div class="form-check d-flex align-items-center justify-content-between">
+                            <div>
+                                <input class="form-check-input" type="radio" name="paymentType" id="pay-card" value="CARD">
+                                <label class="form-check-label fw-bold ms-2" for="pay-card">
+                                    Credit / Debit Card
+                                </label>
+                                <div class="small text-muted ms-4">Visa, Mastercard, RuPay, Diners</div>
+                            </div>
+                            <span style="font-size: 1.5rem;">💳</span>
+                        </div>
+                    </div>
+
+                    <!-- Option 3: Net Banking -->
+                    <div class="payment-option-card mb-2 p-3 rounded-3 border">
+                        <div class="form-check d-flex align-items-center justify-content-between">
+                            <div>
+                                <input class="form-check-input" type="radio" name="paymentType" id="pay-netbanking" value="NET_BANKING">
+                                <label class="form-check-label fw-bold ms-2" for="pay-netbanking">
+                                    Net Banking
+                                </label>
+                                <div class="small text-muted ms-4">HDFC, ICICI, SBI, Axis, Kotak & 40+ Banks</div>
+                            </div>
+                            <span style="font-size: 1.5rem;">🏦</span>
+                        </div>
+                    </div>
+
+                    <!-- Option 4: Cash on Delivery -->
+                    <div class="payment-option-card mb-2 p-3 rounded-3 border">
+                        <div class="form-check d-flex align-items-center justify-content-between">
+                            <div>
+                                <input class="form-check-input" type="radio" name="paymentType" id="pay-cod" value="CASH_ON_DELIVERY">
+                                <label class="form-check-label fw-bold ms-2" for="pay-cod">
+                                    Cash on Delivery (COD)
+                                </label>
+                                <div class="small text-muted ms-4">Pay cash or UPI to delivery partner at doorstep</div>
+                            </div>
+                            <span style="font-size: 1.5rem;">💵</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. Coupons & Offers -->
+                <div class="card border-0 shadow-sm rounded-4 p-4 bg-white">
+                    <div class="d-flex align-items-center justify-content-between mb-3">
+                        <div class="d-flex align-items-center gap-2">
+                            <span class="badge bg-danger rounded-circle p-2" style="width: 28px; height: 28px; display: inline-flex; align-items: center; justify-content: center;">3</span>
+                            <h5 class="fw-bold mb-0">Apply Coupon & Offers</h5>
+                        </div>
+                    </div>
+
+                    <div class="input-group mb-2">
+                        <input type="text" id="coupon-code-input" class="form-control" placeholder="Enter coupon code (e.g. SWIGGY50)" style="text-transform: uppercase;">
+                        <button class="btn btn-foodie-explore px-4" type="button" onclick="applyCouponCode()">Apply Code</button>
+                    </div>
+                    <div id="coupon-feedback" class="mb-3 small"></div>
+
+                    <!-- Active Applied Coupon Banner -->
+                    <div id="checkout-applied-coupon-banner" class="d-none alert alert-success d-flex justify-content-between align-items-center p-3 rounded-3 mb-3">
+                        <div>
+                            <span class="fw-bold text-success" id="checkout-applied-banner-text">🎉 Coupon applied!</span>
+                            <div class="small text-muted" id="checkout-applied-banner-sub">Discount applied to your order</div>
+                        </div>
+                        <button class="btn btn-sm btn-outline-danger rounded-pill px-3 fw-bold" onclick="removeCoupon()">Remove</button>
+                    </div>
+
+                    <!-- Quick Click Coupons -->
+                    <div class="d-flex flex-wrap gap-2" id="checkout-quick-coupons">
+                        <button class="btn btn-sm btn-light border fw-bold text-primary rounded-pill" onclick="quickApplyCoupon('SWIGGY50')">🏷️ SWIGGY50 (₹100 OFF)</button>
+                        <button class="btn btn-sm btn-light border fw-bold text-primary rounded-pill" onclick="quickApplyCoupon('ZOMATO100')">🏷️ ZOMATO100 (₹100 OFF)</button>
+                        <button class="btn btn-sm btn-light border fw-bold text-primary rounded-pill" onclick="quickApplyCoupon('WELCOME50')">🏷️ WELCOME50 (₹50 OFF)</button>
+                        <button class="btn btn-sm btn-light border fw-bold text-primary rounded-pill" onclick="quickApplyCoupon('FREEDEL')">🏷️ FREEDEL (Free Delivery)</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column: Order Summary & Pay Button -->
+            <div class="col-lg-5">
+                <div class="card border-0 shadow-sm rounded-4 p-4 bg-white sticky-top" style="top: 100px;">
+                    <h5 class="fw-bold mb-3">Order Summary</h5>
+                    
+                    <!-- Dishes list with food thumbnails -->
+                    <div id="checkout-items-summary" class="mb-3 pb-2" style="max-height: 280px; overflow-y: auto;">
+                        <!-- Injected by script.js with real food thumbnails -->
+                    </div>
+
+                    <div class="bill-row">
+                        <span>Item Total</span>
+                        <span id="checkout-item-total" class="fw-semibold">₹0</span>
+                    </div>
+                    <div class="bill-row">
+                        <span>Delivery Partner Fee</span>
+                        <span id="checkout-delivery-fee">₹40</span>
+                    </div>
+                    <div class="bill-row">
+                        <span>Platform Fee</span>
+                        <span>₹5</span>
+                    </div>
+                    <div class="bill-row">
+                        <span>Govt Taxes & Charges (5%)</span>
+                        <span id="checkout-taxes" class="fw-semibold">₹0</span>
+                    </div>
+                    <div class="bill-row d-none text-success fw-bold" id="checkout-discount-row">
+                        <span id="applied-coupon-badge">Coupon Discount</span>
+                        <span id="checkout-discount">-₹0</span>
+                    </div>
+
+                    <!-- Highlighted Total Box -->
+                    <div class="total-highlight-card my-3 p-3 rounded-3">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <span class="d-block text-uppercase small text-muted fw-bold">TOTAL AMOUNT TO PAY</span>
+                                <small class="text-success fw-semibold">Inclusive of all taxes & fees</small>
+                            </div>
+                            <span class="fs-3 fw-bolder text-dark" id="checkout-final-total">₹0</span>
+                        </div>
+                    </div>
+
+                    <!-- Group Split Info Pill -->
+                    <div class="card border-0 rounded-3 p-3 my-3 d-none" id="checkout-group-split-card" style="background: #eef2ff; border: 1.5px dashed #6366f1 !important;">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <div class="fw-bold small text-primary" id="checkout-group-split-title">👥 Group Order Active</div>
+                                <small class="text-muted" id="checkout-group-split-sub">Friends sharing this feast</small>
+                            </div>
+                            <button type="button" class="btn btn-sm btn-primary rounded-pill px-3 fw-bold shadow-sm" onclick="openBillSplitModal()">
+                                View Split & QRs
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Primary CTA -->
+                    <button class="btn btn-foodie-explore w-100 py-3 fs-5 fw-bold text-center justify-content-center" onclick="processOrderPayment()" id="place-order-cta-btn">
+                        🔒 Place Order & Pay ➔
+                    </button>
+
+                    <div class="text-center mt-3 text-muted small">
+                        <span>🛡️ Safe & Secure Checkout • 100% Buyer Protection</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Add Address -->
+    <div class="modal fade" id="addAddressModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content rounded-4 border-0 p-3 shadow-lg">
+                <div class="modal-header border-0 pb-0">
+                    <h5 class="modal-title fw-bold">Add Delivery Address</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form onsubmit="event.preventDefault(); saveNewAddressModal();">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold">Full Name</label>
+                                <input type="text" id="new-addr-name" class="form-control rounded-3" required placeholder="John Doe">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold">Phone Number</label>
+                                <input type="tel" id="new-addr-phone" class="form-control rounded-3" required placeholder="9876543210">
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label small fw-bold">Flat / House No / Building</label>
+                                <input type="text" id="new-addr-line1" class="form-control rounded-3" required placeholder="Apt 304, Sunshine Towers">
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label small fw-bold">Area / Street</label>
+                                <input type="text" id="new-addr-line2" class="form-control rounded-3" placeholder="Outer Ring Road, Bellandur">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label small fw-bold">City</label>
+                                <input type="text" id="new-addr-city" class="form-control rounded-3" required value="Bengaluru">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label small fw-bold">State</label>
+                                <input type="text" id="new-addr-state" class="form-control rounded-3" value="Karnataka">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label small fw-bold">Pincode</label>
+                                <input type="text" id="new-addr-pincode" class="form-control rounded-3" required placeholder="560103">
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label small fw-bold">Save as</label>
+                                <select id="new-addr-type" class="form-select rounded-3">
+                                    <option value="Home">🏠 Home</option>
+                                    <option value="Work">💼 Work</option>
+                                    <option value="Other">📍 Other</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-foodie-explore w-100 mt-4 py-2">Save & Deliver Here</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Payment Processing Simulator -->
+    <div class="modal fade" id="paymentProcessingModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content rounded-4 border-0 p-4 text-center shadow-lg">
+                <div id="payment-modal-icon" style="font-size: 3.5rem;" class="mb-3">
+                    <div class="spinner-border text-danger" style="width: 3.5rem; height: 3.5rem;" role="status"></div>
+                </div>
+                <h4 class="fw-bold mb-2" id="payment-modal-title">Processing Order & Payment...</h4>
+                <p class="text-muted small mb-0">Connecting securely to SOAP billing service & payment gateway.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- FLOATING FOODIE AI BUTTON -->
+    <div class="floating-foodie-ai-btn" onclick="toggleFoodieAIModal()" id="foodie-ai-trigger" title="Ask BiteBliss AI for recommendations!">
+        <span style="font-size: 1.25rem;">✨</span>
+        <span>BiteBliss AI</span>
+    </div>
+
+    <!-- FOODIE AI INTERACTIVE MODAL -->
+    <div class="modal fade" id="foodieAIModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
+                <div class="p-3 text-white d-flex align-items-center justify-content-between" style="background: linear-gradient(135deg, #ff4500 0%, #ff7a3d 100%);">
+                    <div class="d-flex align-items-center gap-2">
+                        <span class="fs-4">✨</span>
+                        <div>
+                            <h5 class="fw-bold mb-0">BiteBliss AI Assistant</h5>
+                            <small class="opacity-75">Smart food recommendations & dish finder</small>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="p-4 bg-light" style="max-height: 400px; overflow-y: auto;" id="ai-chat-messages">
+                    <div class="ai-bubble mb-3">
+                        👋 <strong>Need help with your checkout?</strong><br>
+                        Feel free to ask questions about our delivery guarantees, hygiene practices, or offers!
+                    </div>
+                </div>
+                <div class="p-3 bg-white border-top">
+                    <div class="d-flex flex-wrap gap-2 mb-3">
+                        <button class="btn btn-sm btn-outline-warning text-dark rounded-pill fw-semibold" onclick="askFoodieAI('Recommend spicy chicken biryani')">🍗 Spicy Biryani</button>
+                        <button class="btn btn-sm btn-outline-warning text-dark rounded-pill fw-semibold" onclick="askFoodieAI('What is the best veg pizza?')">🍕 Cheesy Pizza</button>
+                        <button class="btn btn-sm btn-outline-warning text-dark rounded-pill fw-semibold" onclick="askFoodieAI('Show top desserts')">🍰 Desserts</button>
+                        <button class="btn btn-sm btn-outline-warning text-dark rounded-pill fw-semibold" onclick="askFoodieAI('Crispy South Indian dosa')">🥞 South Indian</button>
+                    </div>
+                    <div class="input-group">
+                        <input type="text" id="ai-user-prompt" class="form-control rounded-pill-start border-1" placeholder="Ask for recommendations..." onkeydown="if(event.key==='Enter') sendUserAIMessage();">
+                        <button class="btn btn-foodie-explore rounded-pill-end px-3" onclick="sendUserAIMessage()">Ask AI ➔</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- MODAL 1: Group Order Setup & Member Manager -->
+    <!-- ========================================== -->
+    <div class="modal fade" id="groupOrderModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content rounded-4 border-0 shadow-lg overflow-hidden">
+                <div class="p-4 text-white" style="background: linear-gradient(135deg, #4338ca 0%, #6366f1 50%, #8b5cf6 100%);">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <span class="badge bg-white bg-opacity-25 rounded-pill px-3 py-1 mb-2">🎉 Party & Group Ordering</span>
+                            <h4 class="fw-bold mb-1 text-white">Order with Friends</h4>
+                            <p class="text-white-50 small mb-0">Collaborate, assign individual dishes, and auto-split the bill.</p>
+                        </div>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                    </div>
+                </div>
+                <div class="modal-body p-4">
+                    <!-- Room Code Box -->
+                    <div class="bg-light p-3 rounded-3 border mb-3 d-flex justify-content-between align-items-center">
+                        <div>
+                            <small class="text-muted text-uppercase fw-bold d-block" style="font-size: 0.75rem;">Group Room Code</small>
+                            <span class="fs-5 fw-bolder text-primary font-monospace" id="group-room-code-display">FOOD-8421</span>
+                        </div>
+                        <button class="btn btn-sm btn-outline-primary rounded-pill px-3 fw-bold" onclick="copyGroupRoomCode()">
+                            📋 Copy Code
+                        </button>
+                    </div>
+
+                    <!-- Members List -->
+                    <h6 class="fw-bold mb-2 text-dark">Friends in this Order:</h6>
+                    <div id="group-members-list-container" class="d-flex flex-column gap-2 mb-3">
+                        <!-- Injected by script.js -->
+                    </div>
+
+                    <!-- Add Friend Input -->
+                    <div class="input-group mb-3">
+                        <input type="text" id="new-member-name-input" class="form-control" placeholder="Friend's Name (e.g. Rahul, Priya)...">
+                        <button class="btn btn-primary px-3 fw-bold" type="button" onclick="addGroupMemberFromInput()">+ Add Friend</button>
+                    </div>
+
+                    <div class="alert alert-info py-2 px-3 rounded-3 small mb-0">
+                        💡 <strong>How it works:</strong> Once started, you can assign each dish to specific friends in the cart. BiteBliss will calculate exact shares, taxes, and generate UPI QR codes!
+                    </div>
+                </div>
+                <div class="modal-footer bg-light border-0 p-3">
+                    <button type="button" class="btn btn-secondary rounded-pill px-4" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary rounded-pill px-4 fw-bold" onclick="startOrUpdateGroupOrder()">
+                        ✓ Save & Apply to Cart
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- MODAL 2: Interactive Smart Bill Splitter -->
+    <!-- ========================================== -->
+    <div class="modal fade" id="billSplitModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content rounded-4 border-0 shadow-lg overflow-hidden">
+                <div class="p-4 text-white" style="background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #4338ca 100%);">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <div class="d-flex align-items-center gap-2 mb-1">
+                                <span class="badge bg-warning text-dark fw-bold rounded-pill">⚡ Live Smart Splitter</span>
+                                <span class="badge bg-white bg-opacity-25 text-white rounded-pill font-monospace" id="split-modal-room-badge">ROOM #FOOD-8421</span>
+                            </div>
+                            <h4 class="fw-bold mb-0 text-white">Friend-by-Friend Bill Breakdown</h4>
+                            <small class="text-white-50">Taxes, delivery, and coupon discounts are proportionally distributed.</small>
+                        </div>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                    </div>
+                </div>
+
+                <div class="modal-body p-4">
+                    <!-- Split Mode Pills & WhatsApp Button -->
+                    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-4 pb-3 border-bottom">
+                        <div class="d-flex gap-2">
+                            <button class="split-pill-tab active" id="tab-split-itemized" onclick="switchSplitMode('itemized')">
+                                🍕 Itemized (Pay for what you ate)
+                            </button>
+                            <button class="split-pill-tab" id="tab-split-equal" onclick="switchSplitMode('equal')">
+                                ⚖️ Split Equally (Fair Share)
+                            </button>
+                        </div>
+                        <button class="btn btn-success rounded-pill px-3 py-2 fw-bold d-flex align-items-center gap-2 shadow-sm" onclick="shareSplitWhatsApp()">
+                            <span>📲</span> Share on WhatsApp
+                        </button>
+                    </div>
+
+                    <!-- Participating Friends Selector Strip & Quick Add Friend -->
+                    <div class="p-3 bg-light rounded-3 border mb-4">
+                        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-2">
+                            <div>
+                                <strong class="text-dark small d-block">👥 Participating in this Split:</strong>
+                                <small class="text-muted" style="font-size:0.75rem;">Select which friends share this bill. Click to include or exclude.</small>
+                            </div>
+                            <button type="button" class="btn btn-sm btn-outline-primary rounded-pill px-3 fw-bold" onclick="toggleSplitQuickAddFriend()">
+                                + Add New Friend
+                            </button>
+                        </div>
+
+                        <!-- Checkbox Chips Container -->
+                        <div class="d-flex flex-wrap gap-2 align-items-center" id="split-participants-chips">
+                            <!-- Injected dynamically by script.js -->
+                        </div>
+
+                        <!-- Quick Add Friend Inline Form -->
+                        <div id="split-quick-add-form" class="mt-2 pt-2 border-top d-none">
+                            <div class="input-group input-group-sm" style="max-width: 340px;">
+                                <input type="text" id="split-quick-add-input" class="form-control rounded-start-pill" placeholder="New friend's name (e.g. Rohan)..." onkeydown="if(event.key==='Enter') addSplitFriendQuick();">
+                                <button class="btn btn-primary fw-bold rounded-end-pill px-3" type="button" onclick="addSplitFriendQuick()">+ Add</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Split Cards Grid -->
+                    <div class="row g-3" id="friend-split-cards-container">
+                        <!-- Injected by script.js -->
+                    </div>
+
+                    <!-- Overall Reconciliation Alert -->
+                    <div class="bg-light p-3 rounded-3 border mt-4 d-flex justify-content-between align-items-center flex-wrap gap-2">
+                        <div>
+                            <span class="text-muted small d-block">Grand Total Checked:</span>
+                            <strong class="text-dark fs-6" id="split-reconciled-total">Total Bill: ₹0</strong>
+                        </div>
+                        <div>
+                            <span class="badge bg-success-subtle text-success border border-success-subtle px-3 py-2 fw-bold rounded-pill">
+                                100% Mathematically Reconciled ✓
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer bg-light border-0 p-3">
+                    <button type="button" class="btn btn-outline-secondary rounded-pill px-4" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary rounded-pill px-4 fw-bold" onclick="openGroupOrderModal()">
+                        ⚙️ Manage Members
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- MODAL 3: Dynamic Live UPI QR Code Modal   -->
+    <!-- ========================================== -->
+    <div class="modal fade" id="friendUpiQrModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" style="max-width: 420px;">
+            <div class="modal-content rounded-4 border-0 shadow-lg text-center overflow-hidden">
+                <div class="p-3 bg-primary text-white position-relative">
+                    <h5 class="fw-bold mb-0 text-white">📱 UPI Payment QR</h5>
+                    <button type="button" class="btn-close btn-close-white position-absolute top-50 end-0 translate-middle-y me-3" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <div class="mb-2">
+                        <span class="fs-1 d-inline-block mb-1" id="qr-modal-avatar">🚴</span>
+                        <h5 class="fw-bold mb-0 text-dark" id="qr-modal-friend-name">Rahul's Share</h5>
+                        <small class="text-muted">Scan with Google Pay, PhonePe, or Paytm</small>
+                    </div>
+
+                    <div class="my-3 display-6 fw-bolder text-primary" id="qr-modal-amount">
+                        ₹0
+                    </div>
+
+                    <!-- QR Code Canvas / Image Container -->
+                    <div class="p-3 bg-white border rounded-4 shadow-sm d-inline-block mx-auto mb-3" style="width: 220px; height: 220px;">
+                        <img id="qr-modal-image" src="" alt="UPI QR Code" style="width: 100%; height: 100%; object-fit: contain;">
+                    </div>
+
+                    <!-- Supported UPI Apps Bar -->
+                    <div class="d-flex justify-content-center gap-2 align-items-center mb-3 text-muted small fw-semibold">
+                        <span>Google Pay</span> • <span>PhonePe</span> • <span>Paytm</span> • <span>BHIM</span>
+                    </div>
+
+                    <!-- Copy UPI ID -->
+                    <div class="input-group mb-2">
+                        <input type="text" class="form-control text-center font-monospace small bg-light" id="qr-modal-upi-id" value="biteblisspay@okhdfcbank" readonly>
+                        <button class="btn btn-outline-secondary btn-sm px-3" onclick="copyUpiId()">Copy</button>
+                    </div>
+
+                    <small class="text-muted d-block mt-2">
+                        💡 Once scanned, the exact split amount and note are pre-filled in your UPI app!
+                    </small>
+                </div>
+                <div class="modal-footer bg-light border-0 p-3 justify-content-center">
+                    <button type="button" class="btn btn-secondary rounded-pill px-4" data-bs-dismiss="modal">Done</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/script.js"></script>
+</body>
+</html>

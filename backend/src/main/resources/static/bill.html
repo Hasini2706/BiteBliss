@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Confirmation & Live Tracking | BiteBliss</title>
+    <meta name="description" content="Your order has been placed successfully! Track live delivery progress and view tax invoice.">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        body {
+            padding-top: 76px;
+            padding-bottom: 0;
+            background: #fff9f5;
+        }
+    </style>
+</head>
+<body class="foodie-page-wrapper">
+    <!-- BiteBliss Navbar -->
+    <nav class="navbar navbar-expand-lg foodie-navbar fixed-top no-print">
+        <div class="container d-flex align-items-center justify-content-between">
+            <!-- Brand Logo -->
+            <a class="foodie-brand" href="index.html">
+                <div class="foodie-logo-icon">🍕</div>
+                <span>BiteBliss</span>
+            </a>
+
+            <!-- Center Navigation Links -->
+            <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+                <ul class="navbar-nav gap-2 align-items-center">
+                    <li class="nav-item">
+                        <a class="foodie-nav-link" href="index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="foodie-nav-link" href="menu.html">Menu</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="foodie-nav-link" href="cart.html">Offers</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="foodie-nav-link active" href="orders.html">Track Order</a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Right Controls -->
+            <div class="d-flex align-items-center gap-3">
+                <a href="menu.html" class="foodie-circle-btn" title="Search Dishes">
+                    🔍
+                </a>
+                <a href="cart.html" class="foodie-circle-btn" title="View Cart">
+                    🛒
+                    <span class="foodie-badge" id="nav-cart-badge">0</span>
+                </a>
+                <div class="dropdown">
+                    <a href="#" class="foodie-circle-btn" id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false" title="Account">
+                        👤
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0 rounded-3 mt-2" aria-labelledby="profileDropdown">
+                        <li id="dropdown-user-name" class="dropdown-header fw-bold text-dark">Guest</li>
+                        <li><a class="dropdown-item" href="profile.html">My Profile & Addresses</a></li>
+                        <li><a class="dropdown-item" href="orders.html">My Orders</a></li>
+                        <li id="admin-link-item" class="d-none"><a class="dropdown-item text-danger fw-bold" href="admin.html">⚙️ Admin Dashboard</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li id="auth-action-btn"><a class="dropdown-item text-primary fw-bold" href="login.html">Login / Register</a></li>
+                    </ul>
+                </div>
+                <ul class="d-none" id="auth-links"></ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ORDER CONFIRMATION & LIVE TRACKING CONTAINER -->
+    <div class="container my-4 pt-2" id="bill-container">
+        <!-- 1. POLISHED ORDER SUCCESS HEADER CARD -->
+        <div class="order-success-hero-card text-center p-4 p-md-5 mb-4 shadow-sm rounded-4 bg-white border position-relative overflow-hidden">
+            <div class="success-checkmark-circle mb-3 mx-auto">
+                <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+            </div>
+            
+            <h2 class="fw-bold text-dark mb-1">Order Placed Successfully!</h2>
+            <p class="text-muted fs-6 mb-3">Your delicious feast is being prepared with hygiene & care.</p>
+            
+            <!-- Order Meta Chips -->
+            <div class="d-flex align-items-center justify-content-center flex-wrap gap-3 mb-4">
+                <div class="order-meta-chip">
+                    <span class="text-muted">Order ID:</span>
+                    <strong class="text-primary" id="success-order-id">#0</strong>
+                </div>
+                <div class="order-meta-chip">
+                    <span class="text-muted">Estimated Delivery:</span>
+                    <strong class="text-success" id="success-eta-time">⚡ 25-30 Mins</strong>
+                </div>
+                <div class="order-meta-chip">
+                    <span class="text-muted">Status:</span>
+                    <span class="badge bg-success rounded-pill px-3 py-1" id="success-status-pill">CONFIRMED</span>
+                </div>
+            </div>
+
+            <!-- ORDER PROGRESS 6-STEP TRACKER -->
+            <div class="order-progress-stepper mb-4 mx-auto" style="max-width: 860px;" id="order-stepper-container">
+                <!-- Step 1: Order Placed -->
+                <div class="order-step-node completed" id="step-placed">
+                    <div class="step-circle" id="circle-placed">✓</div>
+                    <span class="step-label">Order Placed</span>
+                </div>
+                <div class="step-connector completed" id="line-1"></div>
+
+                <!-- Step 2: Order Accepted -->
+                <div class="order-step-node" id="step-accepted">
+                    <div class="step-circle" id="circle-accepted">○</div>
+                    <span class="step-label">Order Accepted</span>
+                </div>
+                <div class="step-connector" id="line-2"></div>
+
+                <!-- Step 3: Preparing -->
+                <div class="order-step-node" id="step-preparing">
+                    <div class="step-circle" id="circle-preparing">○</div>
+                    <span class="step-label">Preparing</span>
+                </div>
+                <div class="step-connector" id="line-3"></div>
+
+                <!-- Step 4: Ready -->
+                <div class="order-step-node" id="step-ready">
+                    <div class="step-circle" id="circle-ready">○</div>
+                    <span class="step-label">Ready</span>
+                </div>
+                <div class="step-connector" id="line-4"></div>
+
+                <!-- Step 5: Out for Delivery -->
+                <div class="order-step-node" id="step-out">
+                    <div class="step-circle" id="circle-out">○</div>
+                    <span class="step-label">Out for Delivery</span>
+                </div>
+                <div class="step-connector" id="line-5"></div>
+
+                <!-- Step 6: Delivered -->
+                <div class="order-step-node" id="step-delivered">
+                    <div class="step-circle" id="circle-delivered">○</div>
+                    <span class="step-label">Delivered</span>
+                </div>
+            </div>
+
+            <!-- TERMINAL STATUS BANNER (for Rejected / Cancelled) -->
+            <div id="order-terminal-banner" class="alert d-none mb-4 mx-auto text-start rounded-4 p-3" style="max-width: 700px;"></div>
+
+            <!-- LIVE STATUS TIMELINE & UPDATE TIME -->
+            <div class="card border-0 shadow-sm rounded-4 p-3 p-md-4 mb-4 text-start bg-light" id="order-history-card">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h6 class="fw-bold mb-0 text-dark">🕒 Order Status History & Live Updates</h6>
+                    <span class="badge bg-success-subtle text-success border border-success-subtle px-2 py-1 small" id="live-poll-badge">● Live Polling Active</span>
+                </div>
+                <div id="order-status-history-list" class="d-flex flex-column gap-2">
+                    <div class="text-muted small">Loading status history...</div>
+                </div>
+            </div>
+
+            <!-- Action Buttons: Track Order & Continue Shopping -->
+            <div class="d-flex align-items-center justify-content-center flex-wrap gap-3 mt-2 no-print">
+                <a href="#live-tracking-section" class="btn btn-foodie-explore px-4 py-2" onclick="document.getElementById('live-tracking-section')?.scrollIntoView({behavior: 'smooth'})">
+                    📍 Track Order Live
+                </a>
+                <a href="menu.html" class="btn btn-outline-custom px-4 py-2">
+                    🍴 Continue Shopping ➔
+                </a>
+                <button class="btn btn-outline-secondary px-3 py-2 rounded-pill" onclick="window.print()">
+                    🖨️ Print Invoice
+                </button>
+            </div>
+        </div>
+
+        <!-- 2. TRACKING DETAILS & TAX INVOICE -->
+        <div class="row g-4" id="live-tracking-section">
+            <!-- Left: Live GPS Map Simulator & Rider Card -->
+            <div class="col-lg-6 no-print">
+                <div class="card border-0 shadow-sm rounded-4 p-4 bg-white h-100">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <span class="badge bg-success px-3 py-2 rounded-pill d-inline-flex align-items-center gap-2">
+                            <span class="pulse-dot"></span> LIVE GPS TRACKING
+                        </span>
+                        <div class="d-flex align-items-center gap-1 text-muted small">
+                            <span>⏱️ Arrival in:</span>
+                            <strong class="text-danger fs-6" id="live-eta-counter">18 mins</strong>
+                        </div>
+                    </div>
+
+                    <!-- Real Local Street Live GPS Map (Leaflet) with fallback -->
+                    <div class="position-relative rounded-4 overflow-hidden mb-3 border shadow-sm" style="height: 280px; background: #f8fafc;">
+                        <div id="leaflet-delivery-map" style="width: 100%; height: 280px; z-index: 1;"></div>
+                        
+                        <!-- Telemetry Badge (Over the map) -->
+                        <div class="position-absolute bottom-0 start-0 m-3 px-3 py-1 bg-white bg-opacity-95 rounded-pill shadow-sm border small d-flex align-items-center gap-2" style="z-index: 500;">
+                            <span>🛵 Rahul Sharma</span>
+                            <span class="text-muted">•</span>
+                            <span class="text-success fw-bold" id="rider-speed">28 km/h</span>
+                            <span class="text-muted">•</span>
+                            <span class="text-secondary" id="rider-distance">1.2 km away</span>
+                        </div>
+                    </div>
+
+                    <!-- Delivery Partner Hero Card -->
+                    <div class="driver-card p-3 rounded-3 border d-flex align-items-center justify-content-between mb-4">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="driver-avatar rounded-circle bg-warning d-flex align-items-center justify-content-center fs-3" style="width: 52px; height: 52px;">
+                                🧑‍🦱
+                            </div>
+                            <div>
+                                <h6 class="mb-0 fw-bold">Rahul Sharma</h6>
+                                <small class="text-muted">Delivery Hero • ★ 4.9 (580+ deliveries)</small>
+                                <div class="text-success small fw-semibold">Vaccinated & Temperature checked</div>
+                            </div>
+                        </div>
+                        <button class="btn btn-outline-custom btn-sm rounded-pill px-3" onclick="simulateDriverCall()">
+                            📞 Call Rider
+                        </button>
+                    </div>
+
+                    <!-- Step by Step Timeline -->
+                    <h6 class="fw-bold mb-3">Delivery Updates</h6>
+                    <div class="tracking-timeline" id="tracking-timeline-container">
+                        <!-- Injected by script.js -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right: Tax Invoice & Bill Paper -->
+            <div class="col-lg-6">
+                <div class="bill-paper card border-0 shadow-sm rounded-4 p-4 bg-white h-100">
+                    <div class="d-flex justify-content-between align-items-center border-bottom pb-3 mb-3">
+                        <div>
+                            <h4 class="fw-bold mb-0">Tax Invoice & Bill</h4>
+                            <small class="text-muted">Order <span id="bill-order-id" class="fw-bold text-primary">#0</span></small>
+                        </div>
+                        <span class="badge bg-success px-3 py-2 rounded-pill" id="bill-status-badge">CONFIRMED</span>
+                    </div>
+
+                    <div class="row mb-3 small text-muted">
+                        <div class="col-6">
+                            <strong>Date:</strong> <span id="bill-date">-</span><br>
+                            <strong>Payment Mode:</strong> <span id="bill-payment-mode" class="text-dark fw-semibold">ONLINE</span>
+                        </div>
+                        <div class="col-6 text-end">
+                            <strong>Delivering to:</strong><br>
+                            <span id="bill-deliver-address">Home • Outer Ring Road, Bengaluru</span>
+                        </div>
+                    </div>
+
+                    <div class="table-responsive mb-3">
+                        <table class="table table-sm">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Item</th>
+                                    <th class="text-center">Qty</th>
+                                    <th class="text-end">Price</th>
+                                    <th class="text-end">Total</th>
+                                </tr>
+                            </thead>
+                            <tbody id="bill-items-table">
+                                <!-- Injected by script.js -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="border-top pt-2">
+                        <div class="bill-row">
+                            <span>Item Total</span>
+                            <span id="bill-subtotal">₹0</span>
+                        </div>
+                        <div class="bill-row">
+                            <span>Delivery Partner Fee</span>
+                            <span id="bill-delivery-fee">₹40</span>
+                        </div>
+                        <div class="bill-row">
+                            <span>Platform Fee</span>
+                            <span>₹5</span>
+                        </div>
+                        <div class="bill-row">
+                            <span>Govt Taxes & Restaurant Charges (5%)</span>
+                            <span id="bill-taxes">₹0</span>
+                        </div>
+                        <div class="bill-row d-none text-success fw-bold" id="bill-discount-row">
+                            <span>Coupon Discount</span>
+                            <span id="bill-discount">-₹0</span>
+                        </div>
+                        <div class="bill-row total mt-2 pt-2 border-top">
+                            <span class="fw-bolder fs-5">TOTAL PAID</span>
+                            <span id="bill-grand-total" class="fw-bolder fs-5 text-dark">₹0</span>
+                        </div>
+                    </div>
+
+                    <!-- Group Bill Split Summary on Invoice -->
+                    <div id="bill-group-split-section" class="mt-4 pt-3 border-top d-none">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <h6 class="fw-bold mb-0 text-dark">👥 Friend-by-Friend Bill Split</h6>
+                            <span class="badge bg-primary-subtle text-primary border border-primary-subtle font-monospace" id="bill-split-room-code">ROOM #FOOD-8421</span>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-sm table-borderless align-middle mb-2">
+                                <tbody id="bill-split-summary-table">
+                                    <!-- Injected by script.js -->
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="d-flex gap-2 flex-wrap">
+                            <button type="button" class="btn btn-sm btn-outline-primary rounded-pill px-3 fw-bold" onclick="openBillSplitModal()">
+                                📱 View Split & UPI QR Codes
+                            </button>
+                            <button type="button" class="btn btn-sm btn-success rounded-pill px-3 fw-bold" onclick="shareSplitWhatsApp()">
+                                📲 WhatsApp
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="alert alert-light border d-flex align-items-center gap-2 mt-4 p-3 rounded-3 small">
+                        <span>🍃</span>
+                        <span>Thank you for ordering with BiteBliss! For any queries, contact 24x7 support.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="mt-5 py-4 bg-white border-top no-print">
+        <div class="container text-center">
+            <p class="text-muted small mb-0">🍕 BiteBliss - 100% On-Time Food Delivery Guarantee</p>
+        </div>
+    </footer>
+
+    <!-- FLOATING FOODIE AI BUTTON -->
+    <div class="floating-foodie-ai-btn" onclick="toggleFoodieAIModal()" id="foodie-ai-trigger" title="Ask BiteBliss AI for recommendations!">
+        <span style="font-size: 1.25rem;">✨</span>
+        <span>BiteBliss AI</span>
+    </div>
+
+    <!-- FOODIE AI INTERACTIVE MODAL -->
+    <div class="modal fade" id="foodieAIModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
+                <div class="p-3 text-white d-flex align-items-center justify-content-between" style="background: linear-gradient(135deg, #ff4500 0%, #ff7a3d 100%);">
+                    <div class="d-flex align-items-center gap-2">
+                        <span class="fs-4">✨</span>
+                        <div>
+                            <h5 class="fw-bold mb-0">BiteBliss AI Assistant</h5>
+                            <small class="opacity-75">Smart food recommendations & dish finder</small>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="p-4 bg-light" style="max-height: 400px; overflow-y: auto;" id="ai-chat-messages">
+                    <div class="ai-bubble mb-3">
+                        👋 <strong>Your order is on the way!</strong><br>
+                        Have questions about your delivery or want to add a dessert for next time?
+                    </div>
+                </div>
+                <div class="p-3 bg-white border-top">
+                    <div class="d-flex flex-wrap gap-2 mb-3">
+                        <button class="btn btn-sm btn-outline-warning text-dark rounded-pill fw-semibold" onclick="askFoodieAI('Recommend desserts')">🍰 Desserts</button>
+                        <button class="btn btn-sm btn-outline-warning text-dark rounded-pill fw-semibold" onclick="askFoodieAI('How to contact delivery partner?')">📞 Contact Rider</button>
+                    </div>
+                    <div class="input-group">
+                        <input type="text" id="ai-user-prompt" class="form-control rounded-pill-start border-1" placeholder="Ask for recommendations..." onkeydown="if(event.key==='Enter') sendUserAIMessage();">
+                        <button class="btn btn-foodie-explore rounded-pill-end px-3" onclick="sendUserAIMessage()">Ask AI ➔</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- MODAL 1: Group Order Setup & Member Manager -->
+    <!-- ========================================== -->
+    <div class="modal fade" id="groupOrderModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content rounded-4 border-0 shadow-lg overflow-hidden">
+                <div class="p-4 text-white" style="background: linear-gradient(135deg, #4338ca 0%, #6366f1 50%, #8b5cf6 100%);">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <span class="badge bg-white bg-opacity-25 rounded-pill px-3 py-1 mb-2">🎉 Party & Group Ordering</span>
+                            <h4 class="fw-bold mb-1 text-white">Order with Friends</h4>
+                            <p class="text-white-50 small mb-0">Collaborate, assign individual dishes, and auto-split the bill.</p>
+                        </div>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                    </div>
+                </div>
+                <div class="modal-body p-4">
+                    <!-- Room Code Box -->
+                    <div class="bg-light p-3 rounded-3 border mb-3 d-flex justify-content-between align-items-center">
+                        <div>
+                            <small class="text-muted text-uppercase fw-bold d-block" style="font-size: 0.75rem;">Group Room Code</small>
+                            <span class="fs-5 fw-bolder text-primary font-monospace" id="group-room-code-display">FOOD-8421</span>
+                        </div>
+                        <button class="btn btn-sm btn-outline-primary rounded-pill px-3 fw-bold" onclick="copyGroupRoomCode()">
+                            📋 Copy Code
+                        </button>
+                    </div>
+
+                    <!-- Members List -->
+                    <h6 class="fw-bold mb-2 text-dark">Friends in this Order:</h6>
+                    <div id="group-members-list-container" class="d-flex flex-column gap-2 mb-3">
+                        <!-- Injected by script.js -->
+                    </div>
+
+                    <!-- Add Friend Input -->
+                    <div class="input-group mb-3">
+                        <input type="text" id="new-member-name-input" class="form-control" placeholder="Friend's Name (e.g. Rahul, Priya)...">
+                        <button class="btn btn-primary px-3 fw-bold" type="button" onclick="addGroupMemberFromInput()">+ Add Friend</button>
+                    </div>
+
+                    <div class="alert alert-info py-2 px-3 rounded-3 small mb-0">
+                        💡 <strong>How it works:</strong> Once started, you can assign each dish to specific friends in the cart. BiteBliss will calculate exact shares, taxes, and generate UPI QR codes!
+                    </div>
+                </div>
+                <div class="modal-footer bg-light border-0 p-3">
+                    <button type="button" class="btn btn-secondary rounded-pill px-4" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary rounded-pill px-4 fw-bold" onclick="startOrUpdateGroupOrder()">
+                        ✓ Save & Apply to Cart
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- MODAL 2: Interactive Smart Bill Splitter -->
+    <!-- ========================================== -->
+    <div class="modal fade" id="billSplitModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content rounded-4 border-0 shadow-lg overflow-hidden">
+                <div class="p-4 text-white" style="background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #4338ca 100%);">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <div class="d-flex align-items-center gap-2 mb-1">
+                                <span class="badge bg-warning text-dark fw-bold rounded-pill">⚡ Live Smart Splitter</span>
+                                <span class="badge bg-white bg-opacity-25 text-white rounded-pill font-monospace" id="split-modal-room-badge">ROOM #FOOD-8421</span>
+                            </div>
+                            <h4 class="fw-bold mb-0 text-white">Friend-by-Friend Bill Breakdown</h4>
+                            <small class="text-white-50">Taxes, delivery, and coupon discounts are proportionally distributed.</small>
+                        </div>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                    </div>
+                </div>
+
+                <div class="modal-body p-4">
+                    <!-- Split Mode Pills & WhatsApp Button -->
+                    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-4 pb-3 border-bottom">
+                        <div class="d-flex gap-2">
+                            <button class="split-pill-tab active" id="tab-split-itemized" onclick="switchSplitMode('itemized')">
+                                🍕 Itemized (Pay for what you ate)
+                            </button>
+                            <button class="split-pill-tab" id="tab-split-equal" onclick="switchSplitMode('equal')">
+                                ⚖️ Split Equally (Fair Share)
+                            </button>
+                        </div>
+                        <button class="btn btn-success rounded-pill px-3 py-2 fw-bold d-flex align-items-center gap-2 shadow-sm" onclick="shareSplitWhatsApp()">
+                            <span>📲</span> Share on WhatsApp
+                        </button>
+                    </div>
+
+                    <!-- Participating Friends Selector Strip & Quick Add Friend -->
+                    <div class="p-3 bg-light rounded-3 border mb-4">
+                        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-2">
+                            <div>
+                                <strong class="text-dark small d-block">👥 Participating in this Split:</strong>
+                                <small class="text-muted" style="font-size:0.75rem;">Select which friends share this bill. Click to include or exclude.</small>
+                            </div>
+                            <button type="button" class="btn btn-sm btn-outline-primary rounded-pill px-3 fw-bold" onclick="toggleSplitQuickAddFriend()">
+                                + Add New Friend
+                            </button>
+                        </div>
+
+                        <!-- Checkbox Chips Container -->
+                        <div class="d-flex flex-wrap gap-2 align-items-center" id="split-participants-chips">
+                            <!-- Injected dynamically by script.js -->
+                        </div>
+
+                        <!-- Quick Add Friend Inline Form -->
+                        <div id="split-quick-add-form" class="mt-2 pt-2 border-top d-none">
+                            <div class="input-group input-group-sm" style="max-width: 340px;">
+                                <input type="text" id="split-quick-add-input" class="form-control rounded-start-pill" placeholder="New friend's name (e.g. Rohan)..." onkeydown="if(event.key==='Enter') addSplitFriendQuick();">
+                                <button class="btn btn-primary fw-bold rounded-end-pill px-3" type="button" onclick="addSplitFriendQuick()">+ Add</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Split Cards Grid -->
+                    <div class="row g-3" id="friend-split-cards-container">
+                        <!-- Injected by script.js -->
+                    </div>
+
+                    <!-- Overall Reconciliation Alert -->
+                    <div class="bg-light p-3 rounded-3 border mt-4 d-flex justify-content-between align-items-center flex-wrap gap-2">
+                        <div>
+                            <span class="text-muted small d-block">Grand Total Checked:</span>
+                            <strong class="text-dark fs-6" id="split-reconciled-total">Total Bill: ₹0</strong>
+                        </div>
+                        <div>
+                            <span class="badge bg-success-subtle text-success border border-success-subtle px-3 py-2 fw-bold rounded-pill">
+                                100% Mathematically Reconciled ✓
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer bg-light border-0 p-3">
+                    <button type="button" class="btn btn-outline-secondary rounded-pill px-4" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary rounded-pill px-4 fw-bold" onclick="openGroupOrderModal()">
+                        ⚙️ Manage Members
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- MODAL 3: Dynamic Live UPI QR Code Modal   -->
+    <!-- ========================================== -->
+    <div class="modal fade" id="friendUpiQrModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" style="max-width: 420px;">
+            <div class="modal-content rounded-4 border-0 shadow-lg text-center overflow-hidden">
+                <div class="p-3 bg-primary text-white position-relative">
+                    <h5 class="fw-bold mb-0 text-white">📱 UPI Payment QR</h5>
+                    <button type="button" class="btn-close btn-close-white position-absolute top-50 end-0 translate-middle-y me-3" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <div class="mb-2">
+                        <span class="fs-1 d-inline-block mb-1" id="qr-modal-avatar">🚴</span>
+                        <h5 class="fw-bold mb-0 text-dark" id="qr-modal-friend-name">Rahul's Share</h5>
+                        <small class="text-muted">Scan with Google Pay, PhonePe, or Paytm</small>
+                    </div>
+
+                    <div class="my-3 display-6 fw-bolder text-primary" id="qr-modal-amount">
+                        ₹0
+                    </div>
+
+                    <!-- QR Code Canvas / Image Container -->
+                    <div class="p-3 bg-white border rounded-4 shadow-sm d-inline-block mx-auto mb-3" style="width: 220px; height: 220px;">
+                        <img id="qr-modal-image" src="" alt="UPI QR Code" style="width: 100%; height: 100%; object-fit: contain;">
+                    </div>
+
+                    <!-- Supported UPI Apps Bar -->
+                    <div class="d-flex justify-content-center gap-2 align-items-center mb-3 text-muted small fw-semibold">
+                        <span>Google Pay</span> • <span>PhonePe</span> • <span>Paytm</span> • <span>BHIM</span>
+                    </div>
+
+                    <!-- Copy UPI ID -->
+                    <div class="input-group mb-2">
+                        <input type="text" class="form-control text-center font-monospace small bg-light" id="qr-modal-upi-id" value="biteblisspay@okhdfcbank" readonly>
+                        <button class="btn btn-outline-secondary btn-sm px-3" onclick="copyUpiId()">Copy</button>
+                    </div>
+
+                    <small class="text-muted d-block mt-2">
+                        💡 Once scanned, the exact split amount and note are pre-filled in your UPI app!
+                    </small>
+                </div>
+                <div class="modal-footer bg-light border-0 p-3 justify-content-center">
+                    <button type="button" class="btn btn-secondary rounded-pill px-4" data-bs-dismiss="modal">Done</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="js/script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(initDeliveryMap, 300);
+        });
+
+        function initDeliveryMap() {
+            const mapContainer = document.getElementById('leaflet-delivery-map');
+            if (!mapContainer || typeof L === 'undefined') return;
+
+            // Restaurant & Customer local street coordinates (Bellandur, Bengaluru)
+            const restaurantPos = [12.9360, 77.6810]; // Cloud Kitchen, Outer Ring Road
+            const customerPos = [12.9275, 77.6710];   // #42, Green Glen Layout, Bellandur
+
+            const midLat = (restaurantPos[0] + customerPos[0]) / 2;
+            const midLng = (restaurantPos[1] + customerPos[1]) / 2;
+
+            const map = L.map('leaflet-delivery-map', {
+                center: [midLat, midLng],
+                zoom: 15,
+                zoomControl: false,
+                attributionControl: false
+            });
+
+            L.control.zoom({ position: 'topright' }).addTo(map);
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 19
+            }).addTo(map);
+
+            // Custom HTML Icons
+            const restIcon = L.divIcon({
+                html: '<div style="background:#ff4500; color:white; width:36px; height:36px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:18px; box-shadow:0 3px 10px rgba(0,0,0,0.3); border:2px solid white;">🏪</div>',
+                className: '',
+                iconSize: [36, 36],
+                iconAnchor: [18, 18]
+            });
+
+            const homeIcon = L.divIcon({
+                html: '<div style="background:#10b981; color:white; width:36px; height:36px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:18px; box-shadow:0 3px 10px rgba(0,0,0,0.3); border:2px solid white;">🏠</div>',
+                className: '',
+                iconSize: [36, 36],
+                iconAnchor: [18, 18]
+            });
+
+            const riderIcon = L.divIcon({
+                html: '<div id="live-rider-icon" style="background:#ff6600; color:white; width:44px; height:44px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:22px; box-shadow:0 4px 14px rgba(255,102,0,0.6); border:3px solid white; transition: all 1s ease-in-out;">🛵</div>',
+                className: '',
+                iconSize: [44, 44],
+                iconAnchor: [22, 22]
+            });
+
+            L.marker(restaurantPos, { icon: restIcon }).addTo(map).bindPopup("<strong>Kitchen</strong><br>Food Prepared & Dispatched");
+            L.marker(customerPos, { icon: homeIcon }).addTo(map).bindPopup("<strong>Your Address</strong><br>Green Glen Layout, Bengaluru");
+
+            // Road route waypoints along actual city streets
+            const routeWaypoints = [
+                [12.9360, 77.6810],
+                [12.9348, 77.6785],
+                [12.9330, 77.6755],
+                [12.9305, 77.6732],
+                [12.9288, 77.6718],
+                [12.9275, 77.6710]
+            ];
+
+            const routeLine = L.polyline(routeWaypoints, {
+                color: '#ff4500',
+                weight: 5,
+                opacity: 0.85,
+                dashArray: '8, 8',
+                lineCap: 'round'
+            }).addTo(map);
+
+            map.fitBounds(routeLine.getBounds(), { padding: [40, 40] });
+
+            let currentStep = 1;
+            const riderMarker = L.marker(routeWaypoints[currentStep], { icon: riderIcon }).addTo(map);
+            riderMarker.bindPopup("<strong>Delivery Partner: Rahul Sharma</strong><br>Speed: 28 km/h • 1.2 km away");
+
+            let forward = true;
+            setInterval(() => {
+                if (forward) {
+                    currentStep++;
+                    if (currentStep >= routeWaypoints.length - 1) forward = false;
+                } else {
+                    currentStep--;
+                    if (currentStep <= 1) forward = true;
+                }
+                riderMarker.setLatLng(routeWaypoints[currentStep]);
+
+                const distLeft = (0.2 + (routeWaypoints.length - 1 - currentStep) * 0.25).toFixed(1);
+                const distEl = document.getElementById('rider-distance');
+                if (distEl) distEl.textContent = `${distLeft} km away`;
+
+                const speedEl = document.getElementById('rider-speed');
+                if (speedEl) speedEl.textContent = `${Math.floor(25 + Math.random() * 7)} km/h`;
+            }, 3200);
+        }
+    </script>
+</body>
+</html>

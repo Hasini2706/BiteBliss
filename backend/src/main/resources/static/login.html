@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | BiteBliss</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="d-flex align-items-center justify-content-center" style="min-height: 100vh; padding-top: 0;">
+    <div class="container" style="max-width: 440px;">
+        <div class="text-center mb-4">
+            <a class="brand-logo justify-content-center" href="index.html">
+                <span>🍕</span> BiteBliss <span class="brand-badge">LOGIN</span>
+            </a>
+            <p class="text-muted small mt-2">Order from 100+ top dishes delivered in 25 mins</p>
+        </div>
+
+        <div class="card border-0 shadow-lg rounded-4 p-4 p-md-5 bg-white">
+            <h4 class="fw-bold mb-3">Sign In</h4>
+            
+            <div id="error-msg" class="alert alert-danger d-none py-2 small"></div>
+
+            <form onsubmit="login(event)">
+                <div class="mb-3">
+                    <label class="form-label small fw-bold">Email Address</label>
+                    <input type="email" id="email" class="form-control" placeholder="demo@food.com" required>
+                </div>
+                <div class="mb-4">
+                    <label class="form-label small fw-bold">Password</label>
+                    <input type="password" id="password" class="form-control" placeholder="••••••••" required>
+                </div>
+                <button type="submit" class="btn btn-primary-gradient w-100 py-3 fs-6">Sign In</button>
+            </form>
+
+            <div class="mt-4 pt-3 border-top text-center">
+                <p class="text-muted small mb-2">College / Demo Test Credentials:</p>
+                <div class="d-flex gap-2">
+                    <button class="btn btn-light border btn-sm w-50" onclick="document.getElementById('email').value='demo@food.com'; document.getElementById('password').value='password123';">
+                        👤 Demo User
+                    </button>
+                    <button class="btn btn-light border btn-sm w-50" onclick="document.getElementById('email').value='admin@food.com'; document.getElementById('password').value='admin123';">
+                        ⚙️ Admin
+                    </button>
+                </div>
+            </div>
+
+            <div class="text-center mt-4">
+                <small class="text-muted">Don't have an account? <a href="register.html" class="fw-bold text-decoration-none" style="color: var(--primary-orange);">Sign Up</a></small>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/script.js"></script>
+</body>
+</html>

@@ -1,0 +1,1466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BiteBliss - Good Food • Better Mood | Delicious Food Delivered</title>
+    <meta name="description" content="Explore a variety of cuisines from top restaurants and get your favourite meals delivered hot and fresh in 25 minutes.">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+        :root {
+            --foodie-orange: #ff5722;
+            --foodie-orange-dark: #ea580c;
+            --foodie-orange-light: #fff2ee;
+            --text-dark: #0f172a;
+            --text-muted: #64748b;
+            --border-light: #f1f5f9;
+            --card-radius: 20px;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #fbfbfb;
+            color: var(--text-dark);
+            margin: 0;
+            padding-top: 76px;
+        }
+
+        /* =========================================================
+           1. TOP NAVIGATION BAR (Matches Reference Exactly)
+           ========================================================= */
+        .foodie-main-nav {
+            background: #ffffff;
+            border-bottom: 1px solid #f1f5f9;
+            height: 76px;
+            box-shadow: 0 2px 10px rgba(15, 23, 42, 0.03);
+            z-index: 1040;
+        }
+        .nav-inner-container {
+            max-width: 1440px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 100%;
+            gap: 20px;
+        }
+        /* Brand */
+        .foodie-brand-box {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: inherit;
+        }
+        .brand-logo-badge {
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #ff5722 0%, #ea580c 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(234, 88, 12, 0.3);
+            color: #ffffff;
+            font-size: 20px;
+        }
+        .brand-text-group {
+            display: flex;
+            flex-direction: column;
+        }
+        .brand-name {
+            font-size: 21px;
+            font-weight: 800;
+            color: #0f172a;
+            letter-spacing: -0.5px;
+            line-height: 1.1;
+        }
+        .brand-tagline {
+            font-size: 11px;
+            color: #64748b;
+            font-weight: 600;
+            letter-spacing: 0.2px;
+        }
+
+        /* Nav Links */
+        .nav-links-cluster {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+        .nav-link-item {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            color: #475569;
+            padding: 8px 12px;
+            border-radius: 8px;
+            transition: all 0.15s ease;
+            position: relative;
+        }
+        .nav-link-item:hover {
+            color: var(--foodie-orange);
+            background: #fff5f2;
+        }
+        .nav-link-item.active {
+            color: var(--foodie-orange);
+            font-weight: 800;
+        }
+        .nav-link-item.active::after {
+            content: '';
+            position: absolute;
+            bottom: -14px;
+            left: 12px;
+            right: 12px;
+            height: 3px;
+            border-radius: 3px;
+            background: var(--foodie-orange);
+        }
+
+        /* Header Search */
+        .header-search-box {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 9999px;
+            padding: 8px 18px;
+            width: 320px;
+            transition: all 0.2s;
+        }
+        .header-search-box:focus-within {
+            background: #ffffff;
+            border-color: var(--foodie-orange);
+            box-shadow: 0 0 0 3px rgba(255, 87, 34, 0.1);
+        }
+        .header-search-input {
+            border: none;
+            background: transparent;
+            font-size: 13.5px;
+            width: 100%;
+            outline: none;
+            color: #1e293b;
+        }
+        .header-search-input::placeholder {
+            color: #94a3b8;
+        }
+
+        /* Right User / Cart controls */
+        .nav-right-cluster {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        .nav-cart-btn {
+            position: relative;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            color: #1e293b;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            font-size: 17px;
+            transition: all 0.15s;
+        }
+        .nav-cart-btn:hover {
+            background: #fff5f2;
+            border-color: #ffd4c7;
+            color: var(--foodie-orange);
+        }
+        .nav-cart-badge-pill {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            background: var(--foodie-orange);
+            color: #ffffff;
+            font-size: 11px;
+            font-weight: 800;
+            min-width: 19px;
+            height: 19px;
+            border-radius: 9999px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #ffffff;
+        }
+        .user-profile-pill {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            padding: 5px 14px 5px 6px;
+            border-radius: 9999px;
+            cursor: pointer;
+            text-decoration: none;
+            color: #1e293b;
+            font-size: 13.5px;
+            font-weight: 700;
+            transition: all 0.15s;
+        }
+        .user-profile-pill:hover {
+            background: #ffffff;
+            border-color: #cbd5e1;
+        }
+        .user-avatar-circle {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: #1e293b;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+        }
+
+        /* =========================================================
+           2. MAIN TWO-COLUMN DASHBOARD LAYOUT
+           ========================================================= */
+        .portal-layout-wrapper {
+            max-width: 1440px;
+            margin: 0 auto;
+            padding: 24px 24px 60px;
+        }
+        .portal-grid-container {
+            display: flex;
+            gap: 24px;
+            align-items: flex-start;
+        }
+        .portal-main-column {
+            flex: 1;
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 28px;
+        }
+        .portal-sidebar-column {
+            width: 380px;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* =========================================================
+           3. HERO BANNER CARD (Dark Charcoal / Black)
+           ========================================================= */
+        .hero-banner-card {
+            background: #18181b;
+            border-radius: var(--card-radius);
+            padding: 40px 44px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 30px -5px rgba(15, 23, 42, 0.15);
+            min-height: 360px;
+            display: flex;
+            align-items: center;
+        }
+        .hero-banner-content {
+            max-width: 58%;
+            z-index: 2;
+        }
+        .hero-eyebrow {
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            color: #94a3b8;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+        }
+        .hero-main-heading {
+            font-size: 38px;
+            font-weight: 900;
+            color: #ffffff;
+            line-height: 1.15;
+            margin-bottom: 12px;
+            letter-spacing: -0.8px;
+        }
+        .hero-highlight-orange {
+            color: var(--foodie-orange);
+            display: inline-block;
+        }
+        .hero-subtext {
+            color: #cbd5e1;
+            font-size: 14px;
+            line-height: 1.55;
+            margin-bottom: 24px;
+            max-width: 480px;
+        }
+
+        /* Hero Embedded Search */
+        .hero-search-wrapper {
+            background: #ffffff;
+            border-radius: 9999px;
+            padding: 6px 8px 6px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            max-width: 460px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            margin-bottom: 24px;
+        }
+        .hero-search-icon {
+            font-size: 16px;
+            color: #64748b;
+        }
+        .hero-search-input {
+            border: none;
+            outline: none;
+            width: 100%;
+            font-size: 14px;
+            color: #0f172a;
+            font-weight: 500;
+        }
+        .hero-search-input::placeholder {
+            color: #94a3b8;
+        }
+        .hero-search-btn {
+            background: var(--foodie-orange);
+            color: #ffffff;
+            border: none;
+            border-radius: 9999px;
+            padding: 10px 26px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+        .hero-search-btn:hover {
+            background: var(--foodie-orange-dark);
+            transform: translateY(-1px);
+        }
+
+        /* Feature Badges Row */
+        .hero-features-row {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            flex-wrap: wrap;
+        }
+        .hero-feature-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: #e2e8f0;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .hero-feature-icon {
+            font-size: 14px;
+        }
+
+        /* Hero Right Visual */
+        .hero-visual-box {
+            position: absolute;
+            right: 24px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 40%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1;
+        }
+        .hero-dish-img {
+            width: 320px;
+            height: 320px;
+            object-fit: cover;
+            border-radius: 50%;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+            border: 4px solid rgba(255, 255, 255, 0.08);
+        }
+        .hero-cursive-text {
+            position: absolute;
+            top: 24px;
+            right: 48px;
+            font-family: 'Caveat', cursive;
+            color: #ffffff;
+            font-size: 28px;
+            font-weight: 700;
+            line-height: 1.1;
+            transform: rotate(6deg);
+            pointer-events: none;
+            text-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
+        }
+        .hero-cursive-smile {
+            display: inline-block;
+            color: var(--foodie-orange);
+            font-size: 24px;
+        }
+        /* Floating Delivery Pill */
+        .hero-delivery-pill {
+            position: absolute;
+            bottom: 28px;
+            right: 36px;
+            background: #ffffff;
+            color: #0f172a;
+            border-radius: 16px;
+            padding: 10px 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+            z-index: 3;
+        }
+        .pill-scooter-icon {
+            font-size: 22px;
+        }
+        .pill-text-strong {
+            display: block;
+            font-size: 12px;
+            font-weight: 800;
+            color: #0f172a;
+            line-height: 1.2;
+        }
+        .pill-text-sub {
+            display: block;
+            font-size: 11px;
+            color: #64748b;
+        }
+        /* Carousel Dots */
+        .hero-dots-indicator {
+            position: absolute;
+            bottom: 14px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 6px;
+            z-index: 3;
+        }
+        .dot-circle {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.4);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .dot-circle.active {
+            background: var(--foodie-orange);
+            width: 20px;
+            border-radius: 10px;
+        }
+
+        /* =========================================================
+           4. POPULAR CUISINES SECTION
+           ========================================================= */
+        .section-header-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+        .section-main-title {
+            font-size: 19px;
+            font-weight: 800;
+            color: #0f172a;
+            margin: 0;
+            letter-spacing: -0.3px;
+        }
+        .section-view-all {
+            color: var(--foodie-orange);
+            font-size: 13px;
+            font-weight: 700;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            transition: all 0.15s;
+        }
+        .section-view-all:hover {
+            color: var(--foodie-orange-dark);
+            transform: translateX(2px);
+        }
+
+        .cuisines-row-grid {
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            gap: 14px;
+        }
+        .cuisine-card-item {
+            background: #ffffff;
+            border: 1px solid #f1f5f9;
+            border-radius: 16px;
+            padding: 16px 8px;
+            text-align: center;
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 8px rgba(15, 23, 42, 0.02);
+        }
+        .cuisine-card-item:hover {
+            transform: translateY(-4px);
+            border-color: #ffd6cb;
+            box-shadow: 0 10px 20px rgba(255, 87, 34, 0.08);
+            color: var(--foodie-orange);
+        }
+        .cuisine-circle-box {
+            width: 74px;
+            height: 74px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin-bottom: 10px;
+            box-shadow: 0 4px 10px rgba(15, 23, 42, 0.08);
+            border: 2px solid #ffffff;
+        }
+        .cuisine-thumb-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+        .cuisine-card-item:hover .cuisine-thumb-img {
+            transform: scale(1.08);
+        }
+        .cuisine-card-label {
+            font-size: 13px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-top: 2px;
+            white-space: nowrap;
+        }
+        .cuisine-card-item:hover .cuisine-card-label {
+            color: var(--foodie-orange);
+        }
+
+        /* =========================================================
+           5. TOP RESTAURANTS NEAR YOU
+           ========================================================= */
+        .restaurants-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+        }
+        .restaurant-card {
+            background: #ffffff;
+            border: 1px solid #f1f5f9;
+            border-radius: 16px;
+            padding: 14px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            text-decoration: none;
+            color: inherit;
+            position: relative;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 8px rgba(15, 23, 42, 0.02);
+            cursor: pointer;
+        }
+        .restaurant-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 24px rgba(15, 23, 42, 0.06);
+            border-color: #ffd6cb;
+        }
+        .restaurant-img-thumb {
+            width: 68px;
+            height: 68px;
+            border-radius: 12px;
+            object-fit: cover;
+            flex-shrink: 0;
+        }
+        .restaurant-info-box {
+            flex: 1;
+            min-width: 0;
+        }
+        .restaurant-name-h6 {
+            font-size: 15px;
+            font-weight: 800;
+            color: #0f172a;
+            margin-bottom: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .restaurant-rating-row {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 12.5px;
+            font-weight: 700;
+            color: #f59e0b;
+            margin-bottom: 4px;
+        }
+        .rating-reviews-count {
+            color: #64748b;
+            font-weight: 500;
+            font-size: 11.5px;
+        }
+        .restaurant-meta-tags {
+            font-size: 11.5px;
+            color: #64748b;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .restaurant-heart-btn {
+            position: absolute;
+            top: 14px;
+            right: 14px;
+            background: none;
+            border: none;
+            color: #cbd5e1;
+            font-size: 16px;
+            cursor: pointer;
+            padding: 0;
+            transition: all 0.15s;
+        }
+        .restaurant-heart-btn:hover, .restaurant-heart-btn.active {
+            color: #ef4444;
+            transform: scale(1.15);
+        }
+
+        /* =========================================================
+           6. RIGHT SIDEBAR CARDS (5 Cards)
+           ========================================================= */
+
+        /* Card 1: Delivery Location */
+        .sidebar-location-card {
+            background: #ffffff;
+            border: 1px solid #f1f5f9;
+            border-radius: 18px;
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 4px 14px rgba(15, 23, 42, 0.03);
+        }
+        .location-left-group {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .location-pin-badge {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: #fff5f2;
+            color: var(--foodie-orange);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+        .location-meta-sub {
+            font-size: 11px;
+            font-weight: 600;
+            color: #64748b;
+            display: block;
+            margin-bottom: 2px;
+        }
+        .location-title-strong {
+            font-size: 14px;
+            font-weight: 800;
+            color: #0f172a;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            cursor: pointer;
+        }
+        .btn-location-change {
+            background: var(--foodie-orange);
+            color: #ffffff;
+            border: none;
+            border-radius: 9999px;
+            padding: 6px 18px;
+            font-size: 12.5px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+        .btn-location-change:hover {
+            background: var(--foodie-orange-dark);
+            transform: translateY(-1px);
+        }
+
+        /* Card 2: Special Offer Card (Flat 50% OFF) */
+        .sidebar-offer-card {
+            background: linear-gradient(135deg, #fff5f5 0%, #ffede5 100%);
+            border: 1px solid #ffdcd6;
+            border-radius: 18px;
+            padding: 22px 20px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 14px rgba(255, 87, 34, 0.05);
+            cursor: pointer;
+        }
+        .offer-card-content {
+            max-width: 60%;
+            z-index: 2;
+            position: relative;
+        }
+        .offer-star-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            color: #e11d48;
+            font-size: 11px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+        }
+        .offer-main-title {
+            font-size: 21px;
+            font-weight: 900;
+            color: #0f172a;
+            margin-bottom: 2px;
+            letter-spacing: -0.4px;
+        }
+        .offer-subtext {
+            font-size: 12px;
+            color: #64748b;
+            margin-bottom: 12px;
+        }
+        .offer-code-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            color: #475569;
+        }
+        .coupon-dashed-box {
+            background: #ffffff;
+            border: 1.5px dashed var(--foodie-orange);
+            color: var(--foodie-orange);
+            font-weight: 800;
+            font-size: 12px;
+            padding: 4px 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+        .coupon-dashed-box:hover {
+            background: var(--foodie-orange);
+            color: #ffffff;
+        }
+        .offer-pizza-img {
+            position: absolute;
+            right: -25px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 140px;
+            height: 140px;
+            object-fit: cover;
+            border-radius: 50%;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+        }
+
+        /* Card 3: Track Your Order */
+        .sidebar-track-card {
+            background: #ffffff;
+            border: 1px solid #f1f5f9;
+            border-radius: 18px;
+            padding: 20px;
+            box-shadow: 0 4px 14px rgba(15, 23, 42, 0.03);
+        }
+        .track-header-box {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 14px;
+        }
+        .track-scooter-icon {
+            font-size: 22px;
+            color: #334155;
+        }
+        .track-title {
+            font-size: 15px;
+            font-weight: 800;
+            color: #0f172a;
+            margin: 0 0 2px;
+        }
+        .track-subtitle {
+            font-size: 11.5px;
+            color: #64748b;
+            margin: 0;
+        }
+        .track-input-row {
+            display: flex;
+            gap: 8px;
+        }
+        .track-order-input {
+            flex: 1;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 9px 14px;
+            font-size: 13px;
+            color: #0f172a;
+            outline: none;
+            transition: all 0.15s;
+        }
+        .track-order-input:focus {
+            border-color: var(--foodie-orange);
+            background: #ffffff;
+        }
+        .btn-track-submit {
+            background: var(--foodie-orange);
+            color: #ffffff;
+            border: none;
+            border-radius: 10px;
+            padding: 9px 18px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+        .btn-track-submit:hover {
+            background: var(--foodie-orange-dark);
+        }
+
+        /* Card 4: Why Choose BiteBliss? */
+        .sidebar-why-card {
+            background: #111827;
+            border-radius: 18px;
+            padding: 22px 20px;
+            color: #ffffff;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+        }
+        .why-header-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+        .why-title {
+            font-size: 15px;
+            font-weight: 800;
+            color: #ffffff;
+            margin: 0;
+        }
+        .why-view-all {
+            font-size: 12px;
+            color: #94a3b8;
+            text-decoration: none;
+            transition: all 0.15s;
+        }
+        .why-view-all:hover {
+            color: #ffffff;
+        }
+        .why-features-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        .why-feature-pill {
+            background: rgba(255, 255, 255, 0.07);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 10px 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 11.5px;
+            font-weight: 600;
+            color: #e2e8f0;
+            line-height: 1.25;
+        }
+        .why-pill-icon {
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        /* Card 5: Hungry? Let's Fix That! */
+        .sidebar-hungry-card {
+            background: linear-gradient(135deg, #ff5722 0%, #ea580c 100%);
+            border-radius: 18px;
+            padding: 22px 20px;
+            color: #ffffff;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 8px 24px rgba(234, 88, 12, 0.25);
+            cursor: pointer;
+            text-decoration: none;
+            display: block;
+            transition: all 0.2s ease;
+        }
+        .sidebar-hungry-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(234, 88, 12, 0.35);
+            color: #ffffff;
+        }
+        .hungry-card-content {
+            max-width: 65%;
+            z-index: 2;
+            position: relative;
+        }
+        .hungry-title {
+            font-size: 21px;
+            font-weight: 900;
+            line-height: 1.15;
+            margin-bottom: 6px;
+        }
+        .hungry-subtitle {
+            font-size: 12px;
+            opacity: 0.92;
+            margin: 0;
+        }
+        .hungry-bowl-img {
+            position: absolute;
+            right: -15px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 105px;
+            height: 105px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 3px solid rgba(255, 255, 255, 0.35);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        /* =========================================================
+           RESPONSIVE BREAKPOINTS
+           ========================================================= */
+        @media (max-width: 1200px) {
+            .portal-grid-container {
+                flex-direction: column;
+            }
+            .portal-sidebar-column {
+                width: 100%;
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .sidebar-location-card {
+                grid-column: span 2;
+            }
+            .cuisines-row-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+        @media (max-width: 992px) {
+            .nav-links-cluster, .header-search-box {
+                display: none;
+            }
+            .hero-banner-content {
+                max-width: 100%;
+            }
+            .hero-visual-box {
+                display: none;
+            }
+            .restaurants-grid {
+                grid-template-columns: 1fr;
+            }
+            .portal-sidebar-column {
+                grid-template-columns: 1fr;
+            }
+            .sidebar-location-card {
+                grid-column: span 1;
+            }
+        }
+        @media (max-width: 576px) {
+            .cuisines-row-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .hero-main-heading {
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- =========================================================
+         TOP NAVIGATION BAR
+         ========================================================= -->
+    <nav class="foodie-main-nav fixed-top">
+        <div class="nav-inner-container">
+            <!-- Brand Logo -->
+            <a href="index.html" class="foodie-brand-box">
+                <div class="brand-logo-badge">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M18.06 23h-12.12c-.55 0-1-.45-1-1v-2c0-.55.45-1 1-1h12.12c.55 0 1 .45 1 1v2c0 .55-.45 1-1 1zM20 7.5c0-1.38-1.12-2.5-2.5-2.5-.23 0-.45.03-.66.09C16.14 3.01 14.24 1.5 12 1.5s-4.14 1.51-4.84 3.59c-.21-.06-.43-.09-.66-.09-1.38 0-2.5 1.12-2.5 2.5 0 1.25.92 2.29 2.12 2.47C6.04 11.23 6 12.58 6 14v3h12v-3c0-1.42-.04-2.77-.12-4.03 1.2-.18 2.12-1.22 2.12-2.47z"/>
+                    </svg>
+                </div>
+                <div class="brand-text-group">
+                    <span class="brand-name">BiteBliss</span>
+                    <span class="brand-tagline">Good Food • Better Mood</span>
+                </div>
+            </a>
+
+            <!-- Navigation Links -->
+            <ul class="nav-links-cluster">
+                <li>
+                    <a href="index.html" class="nav-link-item active">
+                        <span>🏠</span> Home
+                    </a>
+                </li>
+                <li>
+                    <a href="menu.html" class="nav-link-item">
+                        <span>🍴</span> Menu
+                    </a>
+                </li>
+                <li>
+                    <a href="cart.html" class="nav-link-item">
+                        <span>🏷️</span> Offers
+                    </a>
+                </li>
+                <li>
+                    <a href="orders.html" class="nav-link-item">
+                        <span>📍</span> Track Order
+                    </a>
+                </li>
+                <li>
+                    <a href="menu.html" class="nav-link-item">
+                        <span>ℹ️</span> About
+                    </a>
+                </li>
+            </ul>
+
+            <!-- Header Search Bar -->
+            <div class="header-search-box">
+                <span>🔍</span>
+                <input type="text" class="header-search-input" id="global-nav-search" placeholder="Search for restaurants, dishes..." onkeydown="if(event.key==='Enter') searchHeaderDishes(this.value);">
+            </div>
+
+            <!-- Right Controls: Cart & Profile -->
+            <div class="nav-right-cluster">
+                <a href="cart.html" class="nav-cart-btn" title="View Cart">
+                    🛒
+                    <span class="nav-cart-badge-pill" id="nav-cart-badge">0</span>
+                </a>
+
+                <div class="dropdown">
+                    <div class="user-profile-pill" id="userMenuDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        <div class="user-avatar-circle">👤</div>
+                        <span id="dropdown-user-name">Hi, User</span>
+                        <span style="font-size: 11px; color: #64748b;">▾</span>
+                    </div>
+                    <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0 rounded-3 mt-2" aria-labelledby="userMenuDropdown">
+                        <li class="dropdown-header fw-bold text-dark" id="profile-greeting-text">Welcome to BiteBliss</li>
+                        <li><a class="dropdown-item" href="profile.html">👤 My Profile & Addresses</a></li>
+                        <li><a class="dropdown-item" href="orders.html">📦 My Orders & History</a></li>
+                        <li id="admin-link-item"><a class="dropdown-item text-danger fw-bold" href="admin.html">⚙️ Admin Dashboard</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li id="auth-action-btn"><a class="dropdown-item text-primary fw-bold" href="login.html">🔑 Login / Register</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- =========================================================
+         MAIN TWO-COLUMN PORTAL LAYOUT
+         ========================================================= -->
+    <main class="portal-layout-wrapper">
+        <div class="portal-grid-container">
+
+            <!-- =========================================================
+                 LEFT / MAIN COLUMN (~72% width)
+                 ========================================================= -->
+            <div class="portal-main-column">
+
+                <!-- 1. HERO BANNER CARD (Dark Charcoal / Black) -->
+                <div class="hero-banner-card">
+                    <div class="hero-banner-content">
+                        <div class="hero-eyebrow">GOOD FOOD • FAST DELIVERY • HAPPIER YOU</div>
+                        <h1 class="hero-main-heading">
+                            Delicious Food<br>
+                            <span class="hero-highlight-orange">Delivered to You</span>
+                        </h1>
+                        <p class="hero-subtext">
+                            Explore a variety of cuisines from top restaurants and get your favourite meals delivered hot and fresh.
+                        </p>
+
+                        <!-- Embedded Search -->
+                        <div class="hero-search-wrapper">
+                            <span class="hero-search-icon">🔍</span>
+                            <input type="text" id="hero-search-input" class="hero-search-input" placeholder="Search for 'Biryani', 'Pizza', 'Burger'..." onkeydown="if(event.key==='Enter') searchHeroDishes();">
+                            <button class="hero-search-btn" onclick="searchHeroDishes()">Search</button>
+                        </div>
+
+                        <!-- Feature Badges -->
+                        <div class="hero-features-row">
+                            <div class="hero-feature-item">
+                                <span class="hero-feature-icon">🍃</span> Fresh Ingredients
+                            </div>
+                            <div class="hero-feature-item">
+                                <span class="hero-feature-icon">🛡️</span> 100% Hygienic
+                            </div>
+                            <div class="hero-feature-item">
+                                <span class="hero-feature-icon">⏱️</span> 25 Min Delivery
+                            </div>
+                            <div class="hero-feature-item">
+                                <span class="hero-feature-icon">🏷️</span> Up to 50% OFF
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Hero Visual Right -->
+                    <div class="hero-visual-box">
+                        <img src="https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=700&auto=format&fit=crop&q=80" alt="Special Hyderabadi Dum Biryani" class="hero-dish-img">
+                        <div class="hero-cursive-text">
+                            Good<br>Food<br>Good<br>Mood <span class="hero-cursive-smile">☺</span>
+                        </div>
+                        <div class="hero-delivery-pill">
+                            <span class="pill-scooter-icon">🛵</span>
+                            <div>
+                                <span class="pill-text-strong">Superfast Delivery</span>
+                                <span class="pill-text-sub">in 25 minutes</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Carousel Dots Indicator -->
+                    <div class="hero-dots-indicator">
+                        <span class="dot-circle active"></span>
+                        <span class="dot-circle"></span>
+                        <span class="dot-circle"></span>
+                    </div>
+                </div>
+
+                <!-- 2. POPULAR CUISINES (8 Cards Row) -->
+                <div>
+                    <div class="section-header-row">
+                        <h2 class="section-main-title">Popular Cuisines</h2>
+                        <a href="menu.html" class="section-view-all">View All ➔</a>
+                    </div>
+                    <div class="cuisines-row-grid">
+                        <!-- 1. Biryani -->
+                        <a href="menu.html?category=Biryani%20%26%20Rice" class="cuisine-card-item">
+                            <div class="cuisine-circle-box">
+                                <img src="https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=240&auto=format&fit=crop&q=80" alt="Biryani" class="cuisine-thumb-img">
+                            </div>
+                            <span class="cuisine-card-label">Biryani</span>
+                        </a>
+                        <!-- 2. Pizza -->
+                        <a href="menu.html?category=Pizzas" class="cuisine-card-item">
+                            <div class="cuisine-circle-box">
+                                <img src="https://images.unsplash.com/photo-1534308983496-4fabb1a015ee?w=240&auto=format&fit=crop&q=80" alt="Pizza" class="cuisine-thumb-img">
+                            </div>
+                            <span class="cuisine-card-label">Pizza</span>
+                        </a>
+                        <!-- 3. Burger -->
+                        <a href="menu.html?category=Burgers%20%26%20Wraps" class="cuisine-card-item">
+                            <div class="cuisine-circle-box">
+                                <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=240&auto=format&fit=crop&q=80" alt="Burger" class="cuisine-thumb-img">
+                            </div>
+                            <span class="cuisine-card-label">Burger</span>
+                        </a>
+                        <!-- 4. Chinese -->
+                        <a href="menu.html?category=Chinese%20%26%20Asian" class="cuisine-card-item">
+                            <div class="cuisine-circle-box">
+                                <img src="https://images.unsplash.com/photo-1585032226651-759b368d7246?w=240&auto=format&fit=crop&q=80" alt="Chinese" class="cuisine-thumb-img">
+                            </div>
+                            <span class="cuisine-card-label">Chinese</span>
+                        </a>
+                        <!-- 5. South Indian -->
+                        <a href="menu.html?category=South%20Indian" class="cuisine-card-item">
+                            <div class="cuisine-circle-box">
+                                <img src="https://images.unsplash.com/photo-1668236543090-82eba5ee5976?w=240&auto=format&fit=crop&q=80" alt="South Indian" class="cuisine-thumb-img">
+                            </div>
+                            <span class="cuisine-card-label">South Indian</span>
+                        </a>
+                        <!-- 6. North Indian -->
+                        <a href="menu.html?category=North%20Indian" class="cuisine-card-item">
+                            <div class="cuisine-circle-box">
+                                <img src="https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?w=240&auto=format&fit=crop&q=80" alt="North Indian" class="cuisine-thumb-img">
+                            </div>
+                            <span class="cuisine-card-label">North Indian</span>
+                        </a>
+                        <!-- 7. Desserts -->
+                        <a href="menu.html?category=Desserts" class="cuisine-card-item">
+                            <div class="cuisine-circle-box">
+                                <img src="https://images.unsplash.com/photo-1624353365286-3f8d62daad51?w=240&auto=format&fit=crop&q=80" alt="Desserts" class="cuisine-thumb-img">
+                            </div>
+                            <span class="cuisine-card-label">Desserts</span>
+                        </a>
+                        <!-- 8. Beverages -->
+                        <a href="menu.html?category=Beverages" class="cuisine-card-item">
+                            <div class="cuisine-circle-box">
+                                <img src="https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?w=240&auto=format&fit=crop&q=80" alt="Beverages" class="cuisine-thumb-img">
+                            </div>
+                            <span class="cuisine-card-label">Beverages</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- 3. TOP RESTAURANTS NEAR YOU -->
+                <div>
+                    <div class="section-header-row">
+                        <h2 class="section-main-title">Top Restaurants Near You</h2>
+                        <a href="menu.html" class="section-view-all">View All ➔</a>
+                    </div>
+                    <div class="restaurants-grid">
+                        <!-- Restaurant 1: Paradise Biryani -->
+                        <div class="restaurant-card" onclick="window.location.href='menu.html?search=Biryani';">
+                            <img src="https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=200&auto=format&fit=crop&q=80" alt="Paradise Biryani" class="restaurant-img-thumb">
+                            <div class="restaurant-info-box">
+                                <h3 class="restaurant-name-h6">Paradise Biryani</h3>
+                                <div class="restaurant-rating-row">
+                                    <span>★ 4.5</span>
+                                    <span class="rating-reviews-count">(2.1K)</span>
+                                </div>
+                                <div class="restaurant-meta-tags">
+                                    30-40 mins • Biryani, North Indian
+                                </div>
+                            </div>
+                            <button class="restaurant-heart-btn" onclick="event.stopPropagation(); toggleHeart(this);" title="Save to Favorites">♡</button>
+                        </div>
+
+                        <!-- Restaurant 2: Domino's Pizza -->
+                        <div class="restaurant-card" onclick="window.location.href='menu.html?category=Pizzas';">
+                            <img src="https://images.unsplash.com/photo-1534308983496-4fabb1a015ee?w=200&auto=format&fit=crop&q=80" alt="Domino's Pizza" class="restaurant-img-thumb">
+                            <div class="restaurant-info-box">
+                                <h3 class="restaurant-name-h6">Domino's Pizza</h3>
+                                <div class="restaurant-rating-row">
+                                    <span>★ 4.3</span>
+                                    <span class="rating-reviews-count">(1.8K)</span>
+                                </div>
+                                <div class="restaurant-meta-tags">
+                                    25-35 mins • Pizza, Fast Food
+                                </div>
+                            </div>
+                            <button class="restaurant-heart-btn" onclick="event.stopPropagation(); toggleHeart(this);" title="Save to Favorites">♡</button>
+                        </div>
+
+                        <!-- Restaurant 3: KFC -->
+                        <div class="restaurant-card" onclick="window.location.href='menu.html?search=Burger';">
+                            <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=200&auto=format&fit=crop&q=80" alt="KFC" class="restaurant-img-thumb">
+                            <div class="restaurant-info-box">
+                                <h3 class="restaurant-name-h6">KFC</h3>
+                                <div class="restaurant-rating-row">
+                                    <span>★ 4.2</span>
+                                    <span class="rating-reviews-count">(2.4K)</span>
+                                </div>
+                                <div class="restaurant-meta-tags">
+                                    30-40 mins • Burgers, Chicken
+                                </div>
+                            </div>
+                            <button class="restaurant-heart-btn" onclick="event.stopPropagation(); toggleHeart(this);" title="Save to Favorites">♡</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- =========================================================
+                 RIGHT SIDEBAR COLUMN (~28% width)
+                 ========================================================= -->
+            <div class="portal-sidebar-column">
+
+                <!-- Card 1: Deliver to Location Card -->
+                <div class="sidebar-location-card">
+                    <div class="location-left-group">
+                        <div class="location-pin-badge">📍</div>
+                        <div>
+                            <span class="location-meta-sub">Deliver to</span>
+                            <div class="location-title-strong" onclick="promptChangeLocation()" id="current-location-text">
+                                Gachibowli, Hyderabad <span>▾</span>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn-location-change" onclick="promptChangeLocation()">Change</button>
+                </div>
+
+                <!-- Card 2: Special Offer Card (Flat 50% OFF) -->
+                <div class="sidebar-offer-card" onclick="copyCoupon('FOODIE50')">
+                    <div class="offer-card-content">
+                        <div class="offer-star-badge">★ Special Offer</div>
+                        <h4 class="offer-main-title">Flat 50% OFF</h4>
+                        <div class="offer-subtext">On your first order</div>
+                        <div class="offer-code-pill">
+                            <span>Use code</span>
+                            <span class="coupon-dashed-box" id="coupon-foodie50">FOODIE50</span>
+                        </div>
+                    </div>
+                    <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?w=300&auto=format&fit=crop&q=80" alt="Pizza Offer" class="offer-pizza-img">
+                </div>
+
+                <!-- Card 3: Track Your Order Card -->
+                <div class="sidebar-track-card">
+                    <div class="track-header-box">
+                        <span class="track-scooter-icon">🛵</span>
+                        <div>
+                            <h5 class="track-title">Track Your Order</h5>
+                            <p class="track-subtitle">Enter your order ID to track live status</p>
+                        </div>
+                    </div>
+                    <div class="track-input-row">
+                        <input type="text" id="sidebar-order-id" class="track-order-input" placeholder="Enter Order ID" onkeydown="if(event.key==='Enter') trackSidebarOrder();">
+                        <button class="btn-track-submit" onclick="trackSidebarOrder()">Track</button>
+                    </div>
+                </div>
+
+                <!-- Card 4: Why Choose BiteBliss? Card -->
+                <div class="sidebar-why-card">
+                    <div class="why-header-row">
+                        <h5 class="why-title">Why Choose BiteBliss?</h5>
+                        <a href="menu.html" class="why-view-all">View All ➔</a>
+                    </div>
+                    <div class="why-features-grid">
+                        <div class="why-feature-pill">
+                            <span class="why-pill-icon">👑</span>
+                            <span>Top Rated<br>Restaurants</span>
+                        </div>
+                        <div class="why-feature-pill">
+                            <span class="why-pill-icon">🍃</span>
+                            <span>Fresh & Hygienic<br>Food</span>
+                        </div>
+                        <div class="why-feature-pill">
+                            <span class="why-pill-icon">⏱️</span>
+                            <span>Lightning Fast<br>Delivery</span>
+                        </div>
+                        <div class="why-feature-pill">
+                            <span class="why-pill-icon">🏷️</span>
+                            <span>Exciting Offers<br>Everyday</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 5: Hungry? Let's Fix That! Card -->
+                <a href="menu.html" class="sidebar-hungry-card">
+                    <div class="hungry-card-content">
+                        <h4 class="hungry-title">Hungry?<br>Let's Fix That!</h4>
+                        <p class="hungry-subtitle">Great food. Great offers. Every day.</p>
+                    </div>
+                    <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=300&auto=format&fit=crop&q=80" alt="Delicious Bowl" class="hungry-bowl-img">
+                </a>
+
+            </div>
+
+        </div>
+    </main>
+
+    <!-- FLOATING FOODIE AI BUTTON -->
+    <div class="floating-foodie-ai-btn" onclick="toggleFoodieAIModal()" id="foodie-ai-trigger" title="Ask BiteBliss AI for recommendations!">
+        <span style="font-size: 1.25rem;">✨</span>
+        <span>BiteBliss AI</span>
+    </div>
+
+    <!-- FOODIE AI INTERACTIVE MODAL -->
+    <div class="modal fade" id="foodieAIModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
+                <div class="p-3 text-white d-flex align-items-center justify-content-between" style="background: linear-gradient(135deg, #ff4500 0%, #ff7a3d 100%);">
+                    <div class="d-flex align-items-center gap-2">
+                        <span class="fs-4">✨</span>
+                        <div>
+                            <h5 class="fw-bold mb-0">BiteBliss AI Assistant</h5>
+                            <small class="opacity-75">Smart food recommendations & dish finder</small>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="p-4 bg-light" style="max-height: 400px; overflow-y: auto;" id="ai-chat-messages">
+                    <div class="ai-bubble mb-3">
+                        👋 <strong>Hello! I am BiteBliss AI.</strong><br>
+                        What are you craving today? Click a suggestion below or type any dish name!
+                    </div>
+                </div>
+                <!-- Quick Suggestion Chips -->
+                <div class="p-3 bg-white border-top">
+                    <div class="d-flex flex-wrap gap-2 mb-3">
+                        <button class="btn btn-sm btn-outline-warning text-dark rounded-pill fw-semibold" onclick="askFoodieAI('Recommend spicy chicken biryani')">🍗 Spicy Biryani</button>
+                        <button class="btn btn-sm btn-outline-warning text-dark rounded-pill fw-semibold" onclick="askFoodieAI('What is the best veg pizza?')">🍕 Cheesy Pizza</button>
+                        <button class="btn btn-sm btn-outline-warning text-dark rounded-pill fw-semibold" onclick="askFoodieAI('Show top desserts')">🍰 Desserts</button>
+                        <button class="btn btn-sm btn-outline-warning text-dark rounded-pill fw-semibold" onclick="askFoodieAI('Crispy South Indian dosa')">🥞 South Indian</button>
+                    </div>
+                    <div class="input-group">
+                        <input type="text" id="ai-user-prompt" class="form-control rounded-pill-start border-1" placeholder="Ask for recommendations..." onkeydown="if(event.key==='Enter') sendUserAIMessage();">
+                        <button class="btn btn-danger rounded-pill-end px-3" onclick="sendUserAIMessage()">Ask AI ➔</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/script.js"></script>
+
+    <script>
+        // Hero search
+        function searchHeroDishes() {
+            const query = document.getElementById('hero-search-input').value.trim();
+            if (query) {
+                window.location.href = 'menu.html?search=' + encodeURIComponent(query);
+            } else {
+                window.location.href = 'menu.html';
+            }
+        }
+
+        // Header search
+        function searchHeaderDishes(query) {
+            if (query && query.trim()) {
+                window.location.href = 'menu.html?search=' + encodeURIComponent(query.trim());
+            } else {
+                window.location.href = 'menu.html';
+            }
+        }
+
+        // Order tracking from sidebar
+        function trackSidebarOrder() {
+            const id = document.getElementById('sidebar-order-id').value.trim();
+            if (id) {
+                window.location.href = 'orders.html?orderId=' + encodeURIComponent(id);
+            } else {
+                window.location.href = 'orders.html';
+            }
+        }
+
+        // Coupon copy helper
+        function copyCoupon(code) {
+            navigator.clipboard.writeText(code).then(() => {
+                showToast(`Copied code ${code}! Apply it in your cart.`, '🎉');
+            }).catch(() => {
+                showToast(`Use coupon code ${code} for 50% OFF!`, '🎉');
+            });
+        }
+
+        // Toggle heart favorite
+        function toggleHeart(btn) {
+            btn.classList.toggle('active');
+            if (btn.classList.contains('active')) {
+                btn.innerHTML = '❤️';
+                showToast('Added to your favorite restaurants!', '❤️');
+            } else {
+                btn.innerHTML = '♡';
+                showToast('Removed from favorites', '💔');
+            }
+        }
+
+        // Change location prompt
+        function promptChangeLocation() {
+            const newLoc = prompt('Enter your delivery area/address:', 'Bellandur, Bengaluru');
+            if (newLoc && newLoc.trim()) {
+                document.getElementById('current-location-text').innerHTML = `${escapeHTML(newLoc.trim())} <span>▾</span>`;
+                showToast(`Delivery location updated to ${newLoc.trim()}`, '📍');
+            }
+        }
+
+        // Init page state
+        document.addEventListener('DOMContentLoaded', () => {
+            if (typeof updateNavbar === 'function') {
+                updateNavbar();
+            }
+        });
+    </script>
+</body>
+</html>

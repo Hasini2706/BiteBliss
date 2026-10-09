@@ -1,0 +1,1148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BiteBliss | Admin Management Dashboard</title>
+    <!-- Modern Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- BiteBliss SaaS Admin CSS -->
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+<body class="foodie-admin-app">
+
+    <div class="fd-app-layout">
+
+        <!-- =========================================================
+             LEFT SIDEBAR (Desktop-First SaaS Navigation)
+             ========================================================= -->
+        <aside class="fd-sidebar" id="foodieSidebar">
+            <!-- Sidebar Brand Header -->
+            <a href="admin.html" class="fd-sidebar-brand">
+                <div class="fd-brand-icon-box">
+                    <!-- BiteBliss Utensils / Bag Icon -->
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M18 8h1a4 4 0 0 1 0 8h-1"></path>
+                        <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path>
+                        <line x1="6" y1="1" x2="6" y2="4"></line>
+                        <line x1="10" y1="1" x2="10" y2="4"></line>
+                        <line x1="14" y1="1" x2="14" y2="4"></line>
+                    </svg>
+                </div>
+                <div class="fd-brand-text">
+                    <span class="fd-brand-title">BiteBliss Admin</span>
+                    <span class="fd-brand-badge">Enterprise SaaS</span>
+                </div>
+            </a>
+
+            <!-- Sidebar Navigation Links -->
+            <nav class="fd-sidebar-nav">
+                <span class="fd-nav-label">Main Menu</span>
+                
+                <button class="fd-nav-btn active" data-view="dashboard">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+                    <span>Dashboard</span>
+                </button>
+
+                <button class="fd-nav-btn" data-view="orders">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+                    <span>Orders</span>
+                    <span class="fd-nav-badge">42</span>
+                </button>
+
+                <button class="fd-nav-btn" data-view="restaurants">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                    <span>Restaurants</span>
+                </button>
+
+                <button class="fd-nav-btn" data-view="menu">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3h18v18H3zM9 3v18M15 3v18M3 9h18M3 15h18"/></svg>
+                    <span>Menu Management</span>
+                </button>
+
+                <span class="fd-nav-label">Operations</span>
+
+                <button class="fd-nav-btn" data-view="customers">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                    <span>Customers</span>
+                </button>
+
+                <button class="fd-nav-btn" data-view="delivery">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
+                    <span>Delivery Partners</span>
+                </button>
+
+                <button class="fd-nav-btn" data-view="coupons">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg>
+                    <span>Coupons & Offers</span>
+                </button>
+
+                <button class="fd-nav-btn" data-view="reviews">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                    <span>Reviews & Ratings</span>
+                </button>
+
+                <button class="fd-nav-btn" data-view="payments">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
+                    <span>Payments</span>
+                </button>
+
+                <span class="fd-nav-label">Insights & System</span>
+
+                <button class="fd-nav-btn" data-view="analytics">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+                    <span>Analytics</span>
+                </button>
+
+                <button class="fd-nav-btn" data-view="reports">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+                    <span>Reports</span>
+                </button>
+
+                <button class="fd-nav-btn" data-view="settings">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                    <span>Settings</span>
+                </button>
+            </nav>
+
+            <!-- Sidebar Footer: Logout -->
+            <div class="fd-sidebar-footer">
+                <button class="fd-nav-btn text-danger" onclick="adminLogout()">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#b91c1c" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                    <span>Logout</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- =========================================================
+             MAIN WRAPPER (Top Header + Dynamic Viewport)
+             ========================================================= -->
+        <div class="fd-main-wrapper">
+
+            <!-- Top Header Bar -->
+            <header class="fd-header">
+                <div class="fd-header-left">
+                    <button class="fd-sidebar-toggle" id="sidebarToggleBtn" title="Toggle Sidebar">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+                    </button>
+                    <!-- Global Search Bar -->
+                    <div class="fd-search-bar">
+                        <span class="fd-search-icon">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                        </span>
+                        <input type="text" class="fd-search-input" placeholder="Search orders, dishes, customers, restaurants..." onkeyup="handleGlobalSearch(this.value)">
+                    </div>
+                </div>
+
+                <div class="fd-header-right">
+                    <!-- Live Store Indicator -->
+                    <div class="fd-store-status d-none d-md-inline-flex">
+                        <span class="fd-status-dot"></span>
+                        <span>Live Dispatch Online</span>
+                    </div>
+
+                    <!-- Notification Bell -->
+                    <div class="dropdown">
+                        <button class="fd-icon-btn" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="Notifications">
+                            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+                            <span class="fd-badge-pill">3</span>
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-end fd-dropdown-menu" style="width: 320px; padding: 0;">
+                            <div class="p-3 border-bottom d-flex justify-content-between align-items-center">
+                                <h6 class="mb-0 fw-bold">Recent Alerts</h6>
+                                <span class="badge bg-danger">3 New</span>
+                            </div>
+                            <div class="p-2">
+                                <a class="dropdown-item p-2 rounded-2" href="javascript:void(0)">
+                                    <div class="fw-bold small">New Order #FD10245 received</div>
+                                    <small class="text-muted">Rahul Sharma placed order • 2 min ago</small>
+                                </a>
+                                <a class="dropdown-item p-2 rounded-2" href="javascript:void(0)">
+                                    <div class="fw-bold small">Delivery Delay Warning #FD10243</div>
+                                    <small class="text-muted">Driver delayed in traffic • 8 min ago</small>
+                                </a>
+                                <a class="dropdown-item p-2 rounded-2" href="javascript:void(0)">
+                                    <div class="fw-bold small">Low Stock Alert: Chicken Biryani</div>
+                                    <small class="text-muted">Only 12 portions left at Paradise Biryani</small>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Admin Profile Dropdown -->
+                    <div class="dropdown">
+                        <div class="fd-profile-dropdown dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=120&auto=format&fit=crop&q=80" alt="Admin" class="fd-avatar-circle">
+                            <div class="fd-profile-info d-none d-lg-flex">
+                                <span class="fd-profile-name">Admin User</span>
+                                <span class="fd-profile-role">Administrator</span>
+                            </div>
+                        </div>
+                        <ul class="dropdown-menu dropdown-menu-end fd-dropdown-menu">
+                            <li class="dropdown-header">System Access • <strong>Super Admin</strong></li>
+                            <li><a class="dropdown-item" href="menu.html" target="_blank">🌐 View Customer Menu</a></li>
+                            <li><a class="dropdown-item" href="index.html">🏠 Customer Storefront</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item text-danger" href="javascript:void(0)" onclick="adminLogout()">🚪 Log Out</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Main Viewport Body -->
+            <main class="fd-main-content">
+
+                <!-- =========================================================
+                     VIEW 1: DASHBOARD HOME (Default SaaS Screen)
+                     ========================================================= -->
+                <div class="fd-view-pane active" id="view-dashboard">
+                    <!-- Greeting Header -->
+                    <div class="fd-greeting-header">
+                        <div>
+                            <h1 class="fd-greeting-title">Good Morning, Admin 👋</h1>
+                            <p class="fd-greeting-sub">Here's what's happening with BiteBliss today.</p>
+                        </div>
+                        <div>
+                            <button class="fd-btn fd-btn-primary" onclick="openAddFoodModal()">+ Add New Food</button>
+                        </div>
+                    </div>
+
+                    <!-- 6 KPI Cards Grid -->
+                    <div class="fd-kpi-grid">
+                        <!-- KPI 1: Total Orders -->
+                        <div class="fd-kpi-card">
+                            <div class="fd-kpi-top">
+                                <span class="fd-kpi-label">Total Orders</span>
+                                <div class="fd-kpi-icon-pill" style="background:#e0f2fe; color:#0284c7;">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+                                </div>
+                            </div>
+                            <div class="fd-kpi-value" id="kpi-total-orders">1,248</div>
+                            <div class="fd-kpi-trend positive">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="18 15 12 9 6 15"></polyline></svg>
+                                <span>+12.5% from last month</span>
+                            </div>
+                        </div>
+
+                        <!-- KPI 2: Today's Revenue -->
+                        <div class="fd-kpi-card">
+                            <div class="fd-kpi-top">
+                                <span class="fd-kpi-label">Today's Revenue</span>
+                                <div class="fd-kpi-icon-pill" style="background:#fff0f1; color:#ff4757;">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                                </div>
+                            </div>
+                            <div class="fd-kpi-value currency" id="kpi-today-revenue">₹2,48,560</div>
+                            <div class="fd-kpi-trend positive">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="18 15 12 9 6 15"></polyline></svg>
+                                <span>+8.2%</span>
+                            </div>
+                        </div>
+
+                        <!-- KPI 3: Total Customers -->
+                        <div class="fd-kpi-card">
+                            <div class="fd-kpi-top">
+                                <span class="fd-kpi-label">Total Customers</span>
+                                <div class="fd-kpi-icon-pill" style="background:#fef3c7; color:#b45309;">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                                </div>
+                            </div>
+                            <div class="fd-kpi-value" id="kpi-total-customers">8,420</div>
+                            <div class="fd-kpi-trend positive">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="18 15 12 9 6 15"></polyline></svg>
+                                <span>+15.4%</span>
+                            </div>
+                        </div>
+
+                        <!-- KPI 4: Active Restaurants -->
+                        <div class="fd-kpi-card">
+                            <div class="fd-kpi-top">
+                                <span class="fd-kpi-label">Active Restaurants</span>
+                                <div class="fd-kpi-icon-pill" style="background:#dcfce7; color:#15803d;">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                                </div>
+                            </div>
+                            <div class="fd-kpi-value" id="kpi-active-restaurants">126</div>
+                            <div class="fd-kpi-trend positive">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="18 15 12 9 6 15"></polyline></svg>
+                                <span>+6.8%</span>
+                            </div>
+                        </div>
+
+                        <!-- KPI 5: Pending Orders -->
+                        <div class="fd-kpi-card">
+                            <div class="fd-kpi-top">
+                                <span class="fd-kpi-label">Pending Orders</span>
+                                <div class="fd-kpi-icon-pill" style="background:#ffedd5; color:#ea580c;">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                                </div>
+                            </div>
+                            <div class="fd-kpi-value" style="color:#ea580c;" id="kpi-pending-orders">42</div>
+                            <div class="fd-kpi-trend neutral">
+                                <span>Requires dispatch</span>
+                            </div>
+                        </div>
+
+                        <!-- KPI 6: Delivered Orders -->
+                        <div class="fd-kpi-card">
+                            <div class="fd-kpi-top">
+                                <span class="fd-kpi-label">Delivered Orders</span>
+                                <div class="fd-kpi-icon-pill" style="background:#dcfce7; color:#15803d;">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                                </div>
+                            </div>
+                            <div class="fd-kpi-value" style="color:#15803d;" id="kpi-delivered-orders">1,102</div>
+                            <div class="fd-kpi-trend positive">
+                                <span>98.2% completion rate</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Analytics Section -->
+                    <div class="fd-analytics-grid">
+                        <!-- Revenue Overview Area Chart -->
+                        <div class="fd-card">
+                            <div class="fd-card-header">
+                                <div>
+                                    <h3 class="fd-card-title">Revenue Overview</h3>
+                                    <small class="text-muted">Total income generated in ₹ (INR)</small>
+                                </div>
+                                <div class="fd-time-pills">
+                                    <button class="fd-time-pill active" onclick="setRevenueTimeframe('7d', this)">7 Days</button>
+                                    <button class="fd-time-pill" onclick="setRevenueTimeframe('30d', this)">30 Days</button>
+                                    <button class="fd-time-pill" onclick="setRevenueTimeframe('12m', this)">12 Months</button>
+                                </div>
+                            </div>
+                            <div class="fd-chart-wrap" id="revenue-chart-svg-wrap">
+                                <!-- Area curve injected by admin.js -->
+                            </div>
+                        </div>
+
+                        <!-- Orders & Customer Status Overview -->
+                        <div class="fd-card">
+                            <div class="fd-card-header">
+                                <h3 class="fd-card-title">Order Status Breakdown</h3>
+                            </div>
+                            <div class="fd-status-bars-list">
+                                <div class="fd-status-bar-item">
+                                    <div class="fd-status-bar-meta">
+                                        <span>Delivered</span>
+                                        <span class="text-success fw-bold">1,102 (88%)</span>
+                                    </div>
+                                    <div class="fd-progress-track">
+                                        <div class="fd-progress-fill bg-success" style="width: 88%"></div>
+                                    </div>
+                                </div>
+                                <div class="fd-status-bar-item">
+                                    <div class="fd-status-bar-meta">
+                                        <span>Out for Delivery</span>
+                                        <span class="text-primary fw-bold">84 (7%)</span>
+                                    </div>
+                                    <div class="fd-progress-track">
+                                        <div class="fd-progress-fill bg-primary" style="width: 7%"></div>
+                                    </div>
+                                </div>
+                                <div class="fd-status-bar-item">
+                                    <div class="fd-status-bar-meta">
+                                        <span>Preparing</span>
+                                        <span class="fw-bold" style="color:#ea580c;">68 (5%)</span>
+                                    </div>
+                                    <div class="fd-progress-track">
+                                        <div class="fd-progress-fill" style="width: 5%; background-color:#ea580c;"></div>
+                                    </div>
+                                </div>
+                                <div class="fd-status-bar-item">
+                                    <div class="fd-status-bar-meta">
+                                        <span>Pending Dispatch</span>
+                                        <span class="text-warning fw-bold">42 (3%)</span>
+                                    </div>
+                                    <div class="fd-progress-track">
+                                        <div class="fd-progress-fill bg-warning" style="width: 3%"></div>
+                                    </div>
+                                </div>
+                                <div class="fd-status-bar-item">
+                                    <div class="fd-status-bar-meta">
+                                        <span>Cancelled</span>
+                                        <span class="text-danger fw-bold">28 (2%)</span>
+                                    </div>
+                                    <div class="fd-progress-track">
+                                        <div class="fd-progress-fill bg-danger" style="width: 2%"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Customer Growth Stats -->
+                            <div class="fd-customer-growth-box">
+                                <div>
+                                    <div class="fd-cg-label">New Customers</div>
+                                    <div class="fd-cg-val text-primary">+640</div>
+                                </div>
+                                <div style="border-right: 1px solid var(--fd-border-light);"></div>
+                                <div>
+                                    <div class="fd-cg-label">Returning Customers</div>
+                                    <div class="fd-cg-val text-success">7,780</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Orders Table Section -->
+                    <div class="fd-table-card">
+                        <div class="fd-table-header-row">
+                            <div>
+                                <h3 class="fd-card-title">Recent Orders</h3>
+                                <small class="text-muted">Live customer order pipeline and payment confirmation</small>
+                            </div>
+                            <button class="fd-btn fd-btn-outline" onclick="switchView('orders')">View All Orders →</button>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="fd-table">
+                                <thead>
+                                    <tr>
+                                        <th>Order ID</th>
+                                        <th>Customer</th>
+                                        <th>Restaurant</th>
+                                        <th>Items</th>
+                                        <th>Amount</th>
+                                        <th>Payment</th>
+                                        <th>Status</th>
+                                        <th>Date</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="recent-orders-table-body">
+                                    <!-- Injected by admin.js -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Top Selling Food Section (Small square Unsplash food photography) -->
+                    <div class="fd-card">
+                        <div class="fd-card-header">
+                            <div>
+                                <h3 class="fd-card-title">Top Selling Foods</h3>
+                                <small class="text-muted">Highest customer volume dishes across all partner restaurants</small>
+                            </div>
+                            <button class="fd-btn fd-btn-outline fd-btn-sm" onclick="switchView('menu')">Manage Menu</button>
+                        </div>
+                        <div class="fd-top-selling-grid" id="top-selling-food-grid">
+                            <!-- Injected by admin.js -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- =========================================================
+                     VIEW 2: ORDERS MANAGEMENT PAGE
+                     ========================================================= -->
+                <div class="fd-view-pane" id="view-orders">
+                    <div class="fd-greeting-header">
+                        <div>
+                            <h2 class="fd-greeting-title">Live Order Management</h2>
+                            <p class="fd-greeting-sub">Track, update, dispatch and manage customer food orders.</p>
+                        </div>
+                    </div>
+
+                    <div class="fd-table-card">
+                        <div class="fd-table-header-row">
+                            <div class="fd-filter-pills" id="orders-filter-pills-row">
+                                <button class="fd-pill-btn active" onclick="filterOrdersPage('ALL', this)">All Orders</button>
+                                <button class="fd-pill-btn" onclick="filterOrdersPage('PENDING', this)" id="pill-pending-count">Pending</button>
+                                <button class="fd-pill-btn" onclick="filterOrdersPage('ACCEPTED', this)">Accepted</button>
+                                <button class="fd-pill-btn" onclick="filterOrdersPage('PREPARING', this)">Preparing</button>
+                                <button class="fd-pill-btn" onclick="filterOrdersPage('READY', this)">Ready</button>
+                                <button class="fd-pill-btn" onclick="filterOrdersPage('OUT_FOR_DELIVERY', this)">Out for Delivery</button>
+                                <button class="fd-pill-btn" onclick="filterOrdersPage('DELIVERED', this)">Delivered</button>
+                                <button class="fd-pill-btn" onclick="filterOrdersPage('CANCELLED', this)">Cancelled / Rejected</button>
+                            </div>
+                            <input type="text" class="form-control form-control-sm" style="max-width: 240px; border-radius: 20px;" placeholder="Search Order ID / Customer..." onkeyup="searchOrdersPage(this.value)">
+                        </div>
+
+                        <div class="table-responsive">
+                            <table class="fd-table">
+                                <thead>
+                                    <tr>
+                                        <th>Order ID</th>
+                                        <th>Customer</th>
+                                        <th>Restaurant</th>
+                                        <th>Items Ordered</th>
+                                        <th>Amount</th>
+                                        <th>Payment</th>
+                                        <th>Current Status</th>
+                                        <th>Update Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="orders-page-table-body">
+                                    <!-- Injected by admin.js -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- =========================================================
+                     VIEW 3: RESTAURANTS MANAGEMENT
+                     ========================================================= -->
+                <div class="fd-view-pane" id="view-restaurants">
+                    <div class="fd-greeting-header">
+                        <div>
+                            <h2 class="fd-greeting-title">Restaurant Partners</h2>
+                            <p class="fd-greeting-sub">Manage 126 active cloud kitchens and partner restaurants.</p>
+                        </div>
+                        <button class="fd-btn fd-btn-primary" onclick="showToast('Opening Add Restaurant modal...', '🏢')">+ Add Restaurant</button>
+                    </div>
+
+                    <div class="fd-table-card">
+                        <div class="table-responsive">
+                            <table class="fd-table">
+                                <thead>
+                                    <tr>
+                                        <th>Restaurant</th>
+                                        <th>Cuisine</th>
+                                        <th>Rating</th>
+                                        <th>Orders</th>
+                                        <th>Revenue</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="restaurants-table-body">
+                                    <!-- Injected by admin.js -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- =========================================================
+                     VIEW 4: MENU MANAGEMENT
+                     ========================================================= -->
+                <div class="fd-view-pane" id="view-menu">
+                    <div class="fd-greeting-header">
+                        <div>
+                            <h2 class="fd-greeting-title">Menu Management</h2>
+                            <p class="fd-greeting-sub">Manage dishes, pricing, availability toggles, and food categories.</p>
+                        </div>
+                        <button class="fd-btn fd-btn-primary" onclick="openAddFoodModal()">+ Add Food</button>
+                    </div>
+
+                    <div class="fd-table-card">
+                        <div class="fd-table-header-row">
+                            <div class="d-flex align-items-center gap-3 flex-wrap">
+                                <input type="text" id="menu-search-input" class="form-control form-control-sm" style="min-width: 240px; border-radius: 20px;" placeholder="Search food by name..." onkeyup="searchMenuAdmin(this.value)">
+                                <select class="form-select form-select-sm" style="width: 170px;" onchange="filterMenuByAvailability(this.value)">
+                                    <option value="all">All Stock Status</option>
+                                    <option value="available">Available (In Stock)</option>
+                                    <option value="unavailable">Disabled (Out of Stock)</option>
+                                </select>
+                                <span class="badge bg-light text-secondary border px-3 py-2" id="menu-items-count-badge">Loading...</span>
+                            </div>
+                        </div>
+
+                        <!-- Category Filter Pills -->
+                        <div class="p-3 bg-light border-bottom">
+                            <div class="fd-filter-pills" id="menu-cat-pills">
+                                <button class="fd-pill-btn active" onclick="filterMenuByCategory('All', this)">All Categories</button>
+                                <button class="fd-pill-btn" onclick="filterMenuByCategory('Biryani & Rice', this)">Biryani & Rice</button>
+                                <button class="fd-pill-btn" onclick="filterMenuByCategory('Pizzas', this)">Pizzas</button>
+                                <button class="fd-pill-btn" onclick="filterMenuByCategory('Burgers & Wraps', this)">Burgers & Wraps</button>
+                                <button class="fd-pill-btn" onclick="filterMenuByCategory('North Indian', this)">North Indian</button>
+                                <button class="fd-pill-btn" onclick="filterMenuByCategory('South Indian', this)">South Indian</button>
+                                <button class="fd-pill-btn" onclick="filterMenuByCategory('Chinese & Asian', this)">Chinese & Asian</button>
+                                <button class="fd-pill-btn" onclick="filterMenuByCategory('Desserts', this)">Desserts</button>
+                            </div>
+                        </div>
+
+                        <div class="table-responsive">
+                            <table class="fd-table">
+                                <thead>
+                                    <tr>
+                                        <th>Image</th>
+                                        <th>Food Name</th>
+                                        <th>Category</th>
+                                        <th>Price</th>
+                                        <th>Restaurant</th>
+                                        <th>Availability</th>
+                                        <th>Rating</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="menu-mgmt-table-body">
+                                    <!-- Injected by admin.js -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- =========================================================
+                     VIEW 5: CUSTOMERS
+                     ========================================================= -->
+                <div class="fd-view-pane" id="view-customers">
+                    <div class="fd-greeting-header">
+                        <div>
+                            <h2 class="fd-greeting-title">Customer Directory</h2>
+                            <p class="fd-greeting-sub">Total 8,420 registered food lovers and recurring diners.</p>
+                        </div>
+                    </div>
+
+                    <div class="fd-table-card">
+                        <div class="table-responsive">
+                            <table class="fd-table">
+                                <thead>
+                                    <tr>
+                                        <th>Customer</th>
+                                        <th>Email</th>
+                                        <th>Phone</th>
+                                        <th>Orders</th>
+                                        <th>Total Spent</th>
+                                        <th>Last Order</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="customers-table-body">
+                                    <!-- Injected by admin.js -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- =========================================================
+                     VIEW 6: DELIVERY PARTNERS
+                     ========================================================= -->
+                <div class="fd-view-pane" id="view-delivery">
+                    <div class="fd-greeting-header">
+                        <div>
+                            <h2 class="fd-greeting-title">Delivery Fleet Partners</h2>
+                            <p class="fd-greeting-sub">Active rider status, route assignments, and completed deliveries.</p>
+                        </div>
+                    </div>
+
+                    <div class="fd-table-card">
+                        <div class="table-responsive">
+                            <table class="fd-table">
+                                <thead>
+                                    <tr>
+                                        <th>Delivery Partner</th>
+                                        <th>Orders Completed</th>
+                                        <th>Rating</th>
+                                        <th>Today's Deliveries</th>
+                                        <th>Current Status</th>
+                                        <th>Vehicle</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="delivery-partners-table-body">
+                                    <!-- Injected by admin.js -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- =========================================================
+                     VIEW 7: COUPONS & OFFERS
+                     ========================================================= -->
+                <div class="fd-view-pane" id="view-coupons">
+                    <div class="fd-greeting-header">
+                        <div>
+                            <h2 class="fd-greeting-title">Promotions & Discount Coupons</h2>
+                            <p class="fd-greeting-sub">Manage promo campaigns, minimum cart rules, and redemption limits.</p>
+                        </div>
+                        <button class="fd-btn fd-btn-primary" onclick="openCreateCouponModal()">+ Create Coupon</button>
+                    </div>
+
+                    <div class="fd-table-card">
+                        <div class="table-responsive">
+                            <table class="fd-table">
+                                <thead>
+                                    <tr>
+                                        <th>Coupon Code</th>
+                                        <th>Discount</th>
+                                        <th>Minimum Order</th>
+                                        <th>Usage Count</th>
+                                        <th>Expiry</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="coupons-table-body">
+                                    <!-- Injected by admin.js -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- =========================================================
+                     VIEW 8: PAYMENTS
+                     ========================================================= -->
+                <div class="fd-view-pane" id="view-payments">
+                    <div class="fd-greeting-header">
+                        <div>
+                            <h2 class="fd-greeting-title">Payments & Financial Transactions</h2>
+                            <p class="fd-greeting-sub">Reconciliation logs for UPI, Cards, NetBanking, and Cash on Delivery.</p>
+                        </div>
+                    </div>
+
+                    <!-- Payment Summary KPIs -->
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-3">
+                            <div class="fd-card p-3">
+                                <span class="text-muted small fw-bold">TOTAL REVENUE</span>
+                                <h3 class="fw-bold my-1 text-dark">₹24,85,600</h3>
+                                <small class="text-success fw-bold">✓ Settled into merchant account</small>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="fd-card p-3">
+                                <span class="text-muted small fw-bold">ONLINE PAYMENTS</span>
+                                <h3 class="fw-bold my-1 text-primary">₹18,64,200</h3>
+                                <small class="text-muted">75% of total transactions</small>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="fd-card p-3">
+                                <span class="text-muted small fw-bold">COD PAYMENTS</span>
+                                <h3 class="fw-bold my-1 text-success">₹6,21,400</h3>
+                                <small class="text-muted">Collected via delivery partners</small>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="fd-card p-3">
+                                <span class="text-muted small fw-bold">REFUNDS PROCESSED</span>
+                                <h3 class="fw-bold my-1 text-danger">₹32,400</h3>
+                                <small class="text-muted">1.3% refund rate</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="fd-table-card">
+                        <div class="table-responsive">
+                            <table class="fd-table">
+                                <thead>
+                                    <tr>
+                                        <th>Transaction ID</th>
+                                        <th>Order ID</th>
+                                        <th>Customer</th>
+                                        <th>Payment Method</th>
+                                        <th>Amount</th>
+                                        <th>Status</th>
+                                        <th>Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="payments-table-body">
+                                    <!-- Injected by admin.js -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- =========================================================
+                     VIEW 9: REVIEWS & RATINGS
+                     ========================================================= -->
+                <div class="fd-view-pane" id="view-reviews">
+                    <div class="fd-greeting-header">
+                        <div>
+                            <h2 class="fd-greeting-title">Customer Reviews & Ratings</h2>
+                            <p class="fd-greeting-sub">Track customer sentiment and feedback across all restaurants.</p>
+                        </div>
+                    </div>
+
+                    <div class="row g-4 mb-4">
+                        <div class="col-md-4">
+                            <div class="fd-card text-center p-4">
+                                <div class="display-4 fw-bold text-warning mb-1">4.7</div>
+                                <div class="text-warning mb-2">★★★★★</div>
+                                <div class="fw-bold text-dark">Average Customer Rating</div>
+                                <small class="text-muted">Based on 3,420 verified diner reviews</small>
+                            </div>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="fd-card p-4">
+                                <h6 class="fw-bold mb-3">Rating Breakdown</h6>
+                                <div class="d-flex flex-column gap-2">
+                                    <div class="d-flex align-items-center gap-3">
+                                        <span class="small fw-bold" style="width:40px;">5 ★</span>
+                                        <div class="progress flex-grow-1" style="height:8px;">
+                                            <div class="progress-bar bg-success" style="width:76%"></div>
+                                        </div>
+                                        <span class="small text-muted" style="width:50px;">76%</span>
+                                    </div>
+                                    <div class="d-flex align-items-center gap-3">
+                                        <span class="small fw-bold" style="width:40px;">4 ★</span>
+                                        <div class="progress flex-grow-1" style="height:8px;">
+                                            <div class="progress-bar bg-primary" style="width:16%"></div>
+                                        </div>
+                                        <span class="small text-muted" style="width:50px;">16%</span>
+                                    </div>
+                                    <div class="d-flex align-items-center gap-3">
+                                        <span class="small fw-bold" style="width:40px;">3 ★</span>
+                                        <div class="progress flex-grow-1" style="height:8px;">
+                                            <div class="progress-bar bg-warning" style="width:5%"></div>
+                                        </div>
+                                        <span class="small text-muted" style="width:50px;">5%</span>
+                                    </div>
+                                    <div class="d-flex align-items-center gap-3">
+                                        <span class="small fw-bold" style="width:40px;">2 ★</span>
+                                        <div class="progress flex-grow-1" style="height:8px;">
+                                            <div class="progress-bar bg-orange" style="width:2%; background-color:#ea580c;"></div>
+                                        </div>
+                                        <span class="small text-muted" style="width:50px;">2%</span>
+                                    </div>
+                                    <div class="d-flex align-items-center gap-3">
+                                        <span class="small fw-bold" style="width:40px;">1 ★</span>
+                                        <div class="progress flex-grow-1" style="height:8px;">
+                                            <div class="progress-bar bg-danger" style="width:1%"></div>
+                                        </div>
+                                        <span class="small text-muted" style="width:50px;">1%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="fd-card">
+                        <h5 class="fd-card-title mb-3">Recent Customer Feedback</h5>
+                        <div id="reviews-list-container">
+                            <!-- Injected by admin.js -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- =========================================================
+                     VIEW 10: ANALYTICS
+                     ========================================================= -->
+                <div class="fd-view-pane" id="view-analytics">
+                    <div class="fd-greeting-header">
+                        <div>
+                            <h2 class="fd-greeting-title">Advanced Performance Analytics</h2>
+                            <p class="fd-greeting-sub">Order density patterns, retention cohorts, and demand forecasting.</p>
+                        </div>
+                    </div>
+
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <div class="fd-card h-100">
+                                <h5 class="fd-card-title mb-3">Sales Share by Category</h5>
+                                <div class="d-flex flex-column gap-3">
+                                    <div>
+                                        <div class="d-flex justify-content-between small fw-bold mb-1">
+                                            <span>Biryani & Rice</span>
+                                            <span>42% (₹1,04,395)</span>
+                                        </div>
+                                        <div class="progress" style="height:8px;">
+                                            <div class="progress-bar bg-danger" style="width:42%"></div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="d-flex justify-content-between small fw-bold mb-1">
+                                            <span>Pizzas & Fast Food</span>
+                                            <span>26% (₹64,625)</span>
+                                        </div>
+                                        <div class="progress" style="height:8px;">
+                                            <div class="progress-bar bg-warning" style="width:26%"></div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="d-flex justify-content-between small fw-bold mb-1">
+                                            <span>North Indian & Tandoor</span>
+                                            <span>18% (₹44,740)</span>
+                                        </div>
+                                        <div class="progress" style="height:8px;">
+                                            <div class="progress-bar bg-primary" style="width:18%"></div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="d-flex justify-content-between small fw-bold mb-1">
+                                            <span>Chinese & Asian</span>
+                                            <span>9% (₹22,370)</span>
+                                        </div>
+                                        <div class="progress" style="height:8px;">
+                                            <div class="progress-bar bg-info" style="width:9%"></div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="d-flex justify-content-between small fw-bold mb-1">
+                                            <span>Desserts & Beverages</span>
+                                            <span>5% (₹12,430)</span>
+                                        </div>
+                                        <div class="progress" style="height:8px;">
+                                            <div class="progress-bar bg-success" style="width:5%"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="fd-card h-100">
+                                <h5 class="fd-card-title mb-3">Peak Ordering Hours (Bangalore Region)</h5>
+                                <div class="p-3 bg-light rounded-3 text-center mb-3">
+                                    <div class="h3 fw-bold text-danger mb-1">07:30 PM - 09:30 PM</div>
+                                    <small class="text-muted">Evening Dinner Rush: Average 180 orders / hour</small>
+                                </div>
+                                <ul class="list-group list-group-flush small">
+                                    <li class="list-group-item d-flex justify-content-between px-0">
+                                        <span>Lunch Rush (12:30 PM - 02:00 PM)</span>
+                                        <span class="fw-bold">115 orders/hr</span>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between px-0">
+                                        <span>Evening Snacks (04:30 PM - 06:00 PM)</span>
+                                        <span class="fw-bold">48 orders/hr</span>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between px-0">
+                                        <span>Late Night Feasts (10:30 PM - 12:00 AM)</span>
+                                        <span class="fw-bold">64 orders/hr</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- =========================================================
+                     VIEW 11: REPORTS
+                     ========================================================= -->
+                <div class="fd-view-pane" id="view-reports">
+                    <div class="fd-greeting-header">
+                        <div>
+                            <h2 class="fd-greeting-title">Exportable Business Reports</h2>
+                            <p class="fd-greeting-sub">Generate audit-ready reports, GST summaries, and partner payouts.</p>
+                        </div>
+                    </div>
+
+                    <div class="row g-4">
+                        <div class="col-md-4">
+                            <div class="fd-card text-center p-4">
+                                <div class="fs-1 mb-2">📄</div>
+                                <h5 class="fw-bold mb-2">Daily Sales Statement</h5>
+                                <p class="text-muted small mb-3">Summary of orders, gross receipts, and commissions for today.</p>
+                                <button class="fd-btn fd-btn-outline w-100 justify-content-center" onclick="exportReport('PDF')">Export PDF</button>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="fd-card text-center p-4">
+                                <div class="fs-1 mb-2">📊</div>
+                                <h5 class="fw-bold mb-2">Monthly Revenue & GST</h5>
+                                <p class="text-muted small mb-3">Complete line-item tax breakdown and net restaurant revenues.</p>
+                                <button class="fd-btn fd-btn-outline w-100 justify-content-center" onclick="exportReport('Excel')">Export Excel (XLSX)</button>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="fd-card text-center p-4">
+                                <div class="fs-1 mb-2">📋</div>
+                                <h5 class="fw-bold mb-2">Raw Order Logs</h5>
+                                <p class="text-muted small mb-3">Complete machine-readable CSV table of all historical orders.</p>
+                                <button class="fd-btn fd-btn-outline w-100 justify-content-center" onclick="exportReport('CSV')">Export CSV</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- =========================================================
+                     VIEW 12: SETTINGS
+                     ========================================================= -->
+                <div class="fd-view-pane" id="view-settings">
+                    <div class="fd-greeting-header">
+                        <div>
+                            <h2 class="fd-greeting-title">System Settings</h2>
+                            <p class="fd-greeting-sub">Configure platform branding, operational dispatch radius, and fees.</p>
+                        </div>
+                    </div>
+
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <div class="fd-card">
+                                <h5 class="fd-card-title mb-3">Platform Identity</h5>
+                                <div class="mb-3">
+                                    <label class="form-label small fw-bold">Platform Name</label>
+                                    <input type="text" class="form-control" value="BiteBliss Admin Portal" readonly>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label small fw-bold">Default Currency</label>
+                                    <input type="text" class="form-control" value="₹ INR (Indian Rupee)" readonly>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label small fw-bold">Admin Contact Email</label>
+                                    <input type="email" class="form-control" value="admin@food.com" readonly>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="fd-card">
+                                <h5 class="fd-card-title mb-3">Delivery Parameters</h5>
+                                <div class="mb-3">
+                                    <label class="form-label small fw-bold">Standard Delivery Radius</label>
+                                    <input type="text" class="form-control" value="10.0 km">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label small fw-bold">Base Delivery Fee</label>
+                                    <input type="text" class="form-control" value="₹40.00">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label small fw-bold">Platform Tech Fee</label>
+                                    <input type="text" class="form-control" value="₹5.00">
+                                </div>
+                                <button class="fd-btn fd-btn-primary" onclick="showToast('Settings saved successfully!', '💾')">Save Preferences</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </main>
+        </div>
+    </div>
+
+    <!-- =========================================================
+         MODALS
+         ========================================================= -->
+
+    <!-- Modal: View Order Receipt -->
+    <div class="modal fade" id="orderReceiptModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" style="max-width: 500px;">
+            <div class="modal-content border-0 rounded-4 shadow-lg p-2">
+                <div class="modal-header border-bottom">
+                    <h5 class="modal-title fw-bold">Order Details <span id="receipt-order-id" class="text-danger"></span></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <div class="mb-3 pb-3 border-bottom">
+                        <div class="d-flex justify-content-between mb-1">
+                            <span class="text-muted small">Customer Name:</span>
+                            <span class="fw-bold" id="receipt-customer-name"></span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-1">
+                            <span class="text-muted small">Restaurant:</span>
+                            <span class="fw-bold" id="receipt-restaurant-name"></span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-1">
+                            <span class="text-muted small">Delivery Address:</span>
+                            <span class="fw-bold text-end" id="receipt-delivery-address" style="max-width: 250px;"></span>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <span class="text-muted small">Payment Method:</span>
+                            <span class="fw-bold" id="receipt-payment-method"></span>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <h6 class="fw-bold small text-muted text-uppercase mb-2">Dishes Ordered:</h6>
+                        <div class="p-3 bg-light rounded-3 fw-bold text-dark" id="receipt-items-text"></div>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center pt-2 border-top">
+                        <span class="h6 fw-bold mb-0">Total Paid Amount:</span>
+                        <span class="h4 fw-bold text-danger mb-0" id="receipt-total-amount"></span>
+                    </div>
+                </div>
+                <div class="modal-footer border-top">
+                    <button type="button" class="fd-btn fd-btn-outline" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="fd-btn fd-btn-primary" onclick="showToast('Printing kitchen ticket...', '🖨️')">🖨️ Print Slip</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Add Food to Menu -->
+    <div class="modal fade" id="addFoodModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" style="max-width: 520px;">
+            <div class="modal-content border-0 rounded-4 shadow-lg p-2">
+                <div class="modal-header border-bottom">
+                    <h5 class="modal-title fw-bold">🍽️ Add New Food Dish</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="addFoodForm" onsubmit="handleAddFoodSubmit(event)">
+                    <div class="modal-body p-4">
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold">Food Name</label>
+                            <input type="text" class="form-control" id="new-food-name" placeholder="e.g. Hyderabadi Dum Biryani" required>
+                        </div>
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold">Category</label>
+                                <select class="form-select" id="new-food-category">
+                                    <option value="Biryani & Rice">Biryani & Rice</option>
+                                    <option value="Pizzas">Pizzas</option>
+                                    <option value="Burgers & Wraps">Burgers & Wraps</option>
+                                    <option value="North Indian">North Indian</option>
+                                    <option value="South Indian">South Indian</option>
+                                    <option value="Chinese & Asian">Chinese & Asian</option>
+                                    <option value="Desserts">Desserts</option>
+                                    <option value="Beverages">Beverages</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold">Price (₹)</label>
+                                <input type="number" class="form-control" id="new-food-price" placeholder="280" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold">Restaurant Partner</label>
+                            <input type="text" class="form-control" id="new-food-restaurant" placeholder="e.g. Paradise Biryani" value="Paradise Biryani" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold">Unsplash Photo URL</label>
+                            <input type="url" class="form-control" id="new-food-image" placeholder="https://images.unsplash.com/..." required>
+                        </div>
+                        <div class="form-check form-switch mt-2">
+                            <input class="form-check-input" type="checkbox" id="new-food-isveg">
+                            <label class="form-check-label small fw-bold" for="new-food-isveg">Vegetarian Dish</label>
+                        </div>
+                    </div>
+                    <div class="modal-footer border-top">
+                        <button type="button" class="fd-btn fd-btn-outline" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="fd-btn fd-btn-primary">Save Dish to Catalog</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Create Coupon -->
+    <div class="modal fade" id="createCouponModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" style="max-width: 500px;">
+            <div class="modal-content border-0 rounded-4 shadow-lg p-2">
+                <div class="modal-header border-bottom">
+                    <h5 class="modal-title fw-bold">🏷️ Create Promotional Coupon</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="createCouponForm" onsubmit="handleCreateCouponSubmit(event)">
+                    <div class="modal-body p-4">
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold">Coupon Code</label>
+                            <input type="text" class="form-control text-uppercase" id="new-coupon-code" placeholder="e.g. FEAST50" required>
+                        </div>
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold">Discount Label</label>
+                                <input type="text" class="form-control" id="new-coupon-discount" placeholder="e.g. Flat ₹75 OFF" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold">Min Order (₹)</label>
+                                <input type="number" class="form-control" id="new-coupon-minorder" placeholder="299" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer border-top">
+                        <button type="button" class="fd-btn fd-btn-outline" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="fd-btn fd-btn-primary">Activate Coupon</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 Bundle JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- BiteBliss Admin Engine JS -->
+    <script src="js/admin.js"></script>
+</body>
+</html>

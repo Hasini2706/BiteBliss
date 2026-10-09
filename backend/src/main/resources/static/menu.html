@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Explore Menu - 100+ Delicious Dishes | BiteBliss</title>
+    <meta name="description" content="Browse 100+ freshly prepared Biryanis, Pizzas, Burgers, Chinese, South Indian delicacies and desserts.">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        body {
+            padding-top: 76px;
+            padding-bottom: 0;
+            background: #fff9f5;
+        }
+    </style>
+</head>
+<body class="foodie-page-wrapper">
+    <!-- BiteBliss Navbar -->
+    <nav class="navbar navbar-expand-lg foodie-navbar fixed-top">
+        <div class="container d-flex align-items-center justify-content-between">
+            <!-- Brand Logo -->
+            <a class="foodie-brand" href="index.html">
+                <div class="foodie-logo-icon">🍕</div>
+                <span>BiteBliss</span>
+            </a>
+
+            <!-- Center Navigation Links -->
+            <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+                <ul class="navbar-nav gap-2 align-items-center">
+                    <li class="nav-item">
+                        <a class="foodie-nav-link" href="index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="foodie-nav-link active" href="menu.html">Menu</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="foodie-nav-link" href="cart.html">Offers</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="foodie-nav-link" href="orders.html">Track Order</a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Right Controls -->
+            <div class="d-flex align-items-center gap-3">
+                <a href="menu.html" class="foodie-circle-btn" title="Search Dishes">
+                    🔍
+                </a>
+                <a href="cart.html" class="foodie-circle-btn" title="View Cart">
+                    🛒
+                    <span class="foodie-badge" id="nav-cart-badge">0</span>
+                </a>
+                <div class="dropdown">
+                    <a href="#" class="foodie-circle-btn" id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false" title="Account">
+                        👤
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0 rounded-3 mt-2" aria-labelledby="profileDropdown">
+                        <li id="dropdown-user-name" class="dropdown-header fw-bold text-dark">Guest</li>
+                        <li><a class="dropdown-item" href="profile.html">My Profile & Addresses</a></li>
+                        <li><a class="dropdown-item" href="orders.html">My Orders</a></li>
+                        <li id="admin-link-item" class="d-none"><a class="dropdown-item text-danger fw-bold" href="admin.html">⚙️ Admin Dashboard</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li id="auth-action-btn"><a class="dropdown-item text-primary fw-bold" href="login.html">Login / Register</a></li>
+                    </ul>
+                </div>
+                <ul class="d-none" id="auth-links"></ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- RESTAURANT & FOOD BANNER (Real Unsplash Food Image) -->
+    <div class="container mt-3">
+        <div class="menu-hero-banner shadow-sm rounded-4 overflow-hidden position-relative">
+            <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=1600&auto=format&fit=crop&q=80" alt="BiteBliss Gourmet Banner" class="menu-hero-bg-img">
+            <div class="menu-hero-overlay p-4 p-md-5 d-flex flex-column justify-content-end">
+                <div class="d-flex align-items-center gap-2 mb-2">
+                    <span class="badge bg-warning text-dark fw-bold px-3 py-2 rounded-pill">⭐ 4.8 / 5.0 (2,500+ Reviews)</span>
+                    <span class="badge bg-success fw-bold px-3 py-2 rounded-pill">⚡ 25-30 Mins Delivery</span>
+                </div>
+                <h1 class="text-white fw-bold display-6 mb-1">BiteBliss Master Kitchen & Cuisines</h1>
+                <p class="text-white-50 mb-0">Authentic recipes prepared fresh to order with premium spices and natural ingredients.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN CONTAINER -->
+    <div class="container my-4">
+        <!-- Header & Live Search -->
+        <div class="row align-items-center mb-4 g-3">
+            <div class="col-md-6">
+                <h3 class="fw-bold mb-1">Explore 100+ Dishes</h3>
+                <p class="text-muted mb-0" id="items-count-display">Showing fresh dishes crafted by top master chefs</p>
+            </div>
+            <div class="col-md-6">
+                <div class="input-group shadow-sm rounded-pill overflow-hidden bg-white border">
+                    <span class="input-group-text bg-white border-0 ps-3 text-muted">🔍</span>
+                    <input type="text" id="search-input" class="form-control border-0 py-2" placeholder="Search Biryani, Pizza, Burger, Dosa, Pasta, Shake..." oninput="handleSearch()">
+                    <button class="btn btn-outline-secondary border-0 px-3" type="button" onclick="document.getElementById('search-input').value=''; handleSearch();">✕</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 11 CATEGORY CAROUSEL WITH REAL UNSPLASH THUMBNAILS -->
+        <div class="category-scroll-container mb-4">
+            <div class="category-pill-card active" onclick="filterCategory('', this)">
+                <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=100&auto=format&fit=crop&q=80" class="category-pill-thumb" alt="All">
+                <span>All Dishes</span>
+            </div>
+            <div class="category-pill-card" onclick="filterCategory('Biryani & Rice', this)">
+                <img src="https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=100&auto=format&fit=crop&q=80" class="category-pill-thumb" alt="Biryani">
+                <span>Biryani & Rice</span>
+            </div>
+            <div class="category-pill-card" onclick="filterCategory('Pizzas', this)">
+                <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?w=100&auto=format&fit=crop&q=80" class="category-pill-thumb" alt="Pizzas">
+                <span>Pizzas</span>
+            </div>
+            <div class="category-pill-card" onclick="filterCategory('Burgers & Wraps', this)">
+                <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=100&auto=format&fit=crop&q=80" class="category-pill-thumb" alt="Burgers">
+                <span>Burgers & Wraps</span>
+            </div>
+            <div class="category-pill-card" onclick="filterCategory('North Indian', this)">
+                <img src="https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?w=100&auto=format&fit=crop&q=80" class="category-pill-thumb" alt="North Indian">
+                <span>North Indian</span>
+            </div>
+            <div class="category-pill-card" onclick="filterCategory('South Indian', this)">
+                <img src="https://images.unsplash.com/photo-1668236543090-82eba5ee5976?w=100&auto=format&fit=crop&q=80" class="category-pill-thumb" alt="South Indian">
+                <span>South Indian</span>
+            </div>
+            <div class="category-pill-card" onclick="filterCategory('Chinese & Asian', this)">
+                <img src="https://images.unsplash.com/photo-1585032226651-759b368d7246?w=100&auto=format&fit=crop&q=80" class="category-pill-thumb" alt="Chinese">
+                <span>Chinese & Asian</span>
+            </div>
+            <div class="category-pill-card" onclick="filterCategory('Pastas', this)">
+                <img src="https://images.unsplash.com/photo-1621996346565-e3d5d628169a?w=100&auto=format&fit=crop&q=80" class="category-pill-thumb" alt="Pastas">
+                <span>Pastas</span>
+            </div>
+            <div class="category-pill-card" onclick="filterCategory('Street Food', this)">
+                <img src="https://images.unsplash.com/photo-1601050690597-df0568f70950?w=100&auto=format&fit=crop&q=80" class="category-pill-thumb" alt="Street Food">
+                <span>Street Food</span>
+            </div>
+            <div class="category-pill-card" onclick="filterCategory('Healthy Bowls', this)">
+                <img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=100&auto=format&fit=crop&q=80" class="category-pill-thumb" alt="Healthy Bowls">
+                <span>Healthy Bowls</span>
+            </div>
+            <div class="category-pill-card" onclick="filterCategory('Desserts', this)">
+                <img src="https://images.unsplash.com/photo-1624353365286-3f8d62daad51?w=100&auto=format&fit=crop&q=80" class="category-pill-thumb" alt="Desserts">
+                <span>Desserts</span>
+            </div>
+            <div class="category-pill-card" onclick="filterCategory('Beverages', this)">
+                <img src="https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?w=100&auto=format&fit=crop&q=80" class="category-pill-thumb" alt="Beverages">
+                <span>Beverages</span>
+            </div>
+        </div>
+
+        <!-- FILTER & SORT BAR -->
+        <div class="filter-bar mb-4">
+            <!-- Diet Filter Buttons -->
+            <div class="btn-group" role="group">
+                <button type="button" class="filter-chip diet-filter-btn active" onclick="setDietFilter('all', this)">All Food</button>
+                <button type="button" class="filter-chip diet-filter-btn" onclick="setDietFilter('veg', this)">🟢 Pure Veg</button>
+                <button type="button" class="filter-chip diet-filter-btn" onclick="setDietFilter('nonveg', this)">🔴 Non-Veg</button>
+            </div>
+
+            <!-- Rating & Speed Chips -->
+            <button class="filter-chip" onclick="toggleRatingFilter(this)">⭐ Rating 4.5+</button>
+            <button class="filter-chip" onclick="toggleFastDelivery(this)">⚡ Under 20 Mins</button>
+
+            <!-- Sort Dropdown -->
+            <div class="ms-auto">
+                <select class="form-select form-select-sm rounded-pill px-3 py-2 shadow-sm border" onchange="handleSortChange(this.value)">
+                    <option value="default">Sort by: Relevance</option>
+                    <option value="rating">Top Rated</option>
+                    <option value="price-low">Price: Low to High</option>
+                    <option value="price-high">Price: High to Low</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- FOOD GRID (Injected dynamically by script.js) -->
+        <div class="row" id="menu-container">
+            <!-- Dishes injected here -->
+        </div>
+
+        <!-- PAGINATION -->
+        <nav aria-label="Page navigation" class="mt-4">
+            <ul class="pagination justify-content-center" id="pagination">
+                <!-- Pagination injected here -->
+            </ul>
+        </nav>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="mt-auto py-4 bg-white border-top">
+        <div class="container text-center">
+            <p class="text-muted small mb-0">🍕 BiteBliss - 100+ Authentic Dishes & Instant Delivery • Built with Spring Boot 3 & Modern UI</p>
+        </div>
+    </footer>
+
+    <!-- FLOATING FOODIE AI BUTTON -->
+    <div class="floating-foodie-ai-btn" onclick="toggleFoodieAIModal()" id="foodie-ai-trigger" title="Ask BiteBliss AI for recommendations!">
+        <span style="font-size: 1.25rem;">✨</span>
+        <span>BiteBliss AI</span>
+    </div>
+
+    <!-- FOODIE AI INTERACTIVE MODAL -->
+    <div class="modal fade" id="foodieAIModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
+                <div class="p-3 text-white d-flex align-items-center justify-content-between" style="background: linear-gradient(135deg, #ff4500 0%, #ff7a3d 100%);">
+                    <div class="d-flex align-items-center gap-2">
+                        <span class="fs-4">✨</span>
+                        <div>
+                            <h5 class="fw-bold mb-0">BiteBliss AI Assistant</h5>
+                            <small class="opacity-75">Smart food recommendations & dish finder</small>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="p-4 bg-light" style="max-height: 400px; overflow-y: auto;" id="ai-chat-messages">
+                    <div class="ai-bubble mb-3">
+                        👋 <strong>Hello! Looking for a recommendation?</strong><br>
+                        Tell me what you feel like having or tap a button below!
+                    </div>
+                </div>
+                <div class="p-3 bg-white border-top">
+                    <div class="d-flex flex-wrap gap-2 mb-3">
+                        <button class="btn btn-sm btn-outline-warning text-dark rounded-pill fw-semibold" onclick="askFoodieAI('Recommend spicy chicken biryani')">🍗 Spicy Biryani</button>
+                        <button class="btn btn-sm btn-outline-warning text-dark rounded-pill fw-semibold" onclick="askFoodieAI('What is the best veg pizza?')">🍕 Cheesy Pizza</button>
+                        <button class="btn btn-sm btn-outline-warning text-dark rounded-pill fw-semibold" onclick="askFoodieAI('Show top desserts')">🍰 Desserts</button>
+                        <button class="btn btn-sm btn-outline-warning text-dark rounded-pill fw-semibold" onclick="askFoodieAI('Crispy South Indian dosa')">🥞 South Indian</button>
+                    </div>
+                    <div class="input-group">
+                        <input type="text" id="ai-user-prompt" class="form-control rounded-pill-start border-1" placeholder="Ask for recommendations..." onkeydown="if(event.key==='Enter') sendUserAIMessage();">
+                        <button class="btn btn-foodie-explore rounded-pill-end px-3" onclick="sendUserAIMessage()">Ask AI ➔</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/script.js"></script>
+</body>
+</html>

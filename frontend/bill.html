@@ -406,7 +406,7 @@
 
                     <!-- Add Friend Input -->
                     <div class="input-group mb-3">
-                        <input type="text" id="new-member-name-input" class="form-control" placeholder="Friend's Name (e.g. Rahul, Priya)...">
+                        <input type="text" id="new-member-name-input" class="form-control" placeholder="Friend's Name (e.g. Rahul, Priya)..." onkeydown="if(event.key==='Enter') addGroupMemberFromInput();">
                         <button class="btn btn-primary px-3 fw-bold" type="button" onclick="addGroupMemberFromInput()">+ Add Friend</button>
                     </div>
 
@@ -467,22 +467,17 @@
                                 <strong class="text-dark small d-block">👥 Participating in this Split:</strong>
                                 <small class="text-muted" style="font-size:0.75rem;">Select which friends share this bill. Click to include or exclude.</small>
                             </div>
-                            <button type="button" class="btn btn-sm btn-outline-primary rounded-pill px-3 fw-bold" onclick="toggleSplitQuickAddFriend()">
-                                + Add New Friend
-                            </button>
+                            <div class="d-flex align-items-center gap-1">
+                                <input type="text" id="split-quick-add-input" class="form-control form-control-sm rounded-pill px-3" placeholder="Friend's name..." style="max-width: 150px; font-size: 0.82rem;" onkeydown="if(event.key==='Enter') addSplitFriendQuick();">
+                                <button type="button" class="btn btn-sm btn-primary rounded-pill px-3 fw-bold text-nowrap shadow-xs" onclick="addSplitFriendQuick()">
+                                    + Add Friend
+                                </button>
+                            </div>
                         </div>
 
                         <!-- Checkbox Chips Container -->
                         <div class="d-flex flex-wrap gap-2 align-items-center" id="split-participants-chips">
                             <!-- Injected dynamically by script.js -->
-                        </div>
-
-                        <!-- Quick Add Friend Inline Form -->
-                        <div id="split-quick-add-form" class="mt-2 pt-2 border-top d-none">
-                            <div class="input-group input-group-sm" style="max-width: 340px;">
-                                <input type="text" id="split-quick-add-input" class="form-control rounded-start-pill" placeholder="New friend's name (e.g. Rohan)..." onkeydown="if(event.key==='Enter') addSplitFriendQuick();">
-                                <button class="btn btn-primary fw-bold rounded-end-pill px-3" type="button" onclick="addSplitFriendQuick()">+ Add</button>
-                            </div>
                         </div>
                     </div>
 

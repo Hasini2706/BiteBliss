@@ -795,9 +795,10 @@ function renderCartPage() {
                     <span class="small text-muted fw-semibold d-flex align-items-center gap-1" style="font-size: 0.82rem;">
                         <span>🎯</span> <strong>Ordered For:</strong>
                     </span>
-                    <select class="form-select form-select-sm group-member-select w-auto shadow-sm" style="border-radius: 20px; font-weight: 600; font-size: 0.82rem; border-color: #6366f1; color: #4338ca;" onchange="assignCartItemMember(${item.menuItemId}, this.value)">
+                    <select class="form-select form-select-sm group-member-select w-auto shadow-sm" style="border-radius: 20px; font-weight: 600; font-size: 0.82rem; border-color: #6366f1; color: #4338ca;" onchange="handleCartItemMemberChange(${item.menuItemId}, this.value, this)">
                         <option value="shared" ${currentAssignment === 'shared' ? 'selected' : ''}>🤝 Shared by All</option>
                         ${memberOptions}
+                        <option value="__ADD_NEW__">➕ Add New Friend...</option>
                     </select>
                 </div>
             `;
@@ -2502,13 +2503,39 @@ function renderGroupMembersList() {
     `).join('');
 }
 
-function addGroupMemberFromInput() {
-    const input = document.getElementById('new-member-name-input');
-    if (!input) return;
-    const name = input.value.trim();
-    if (!name) {
+function addNewFriend(name) {
+    if (!name || !name.trim()) {
         showToast('Please enter a friend\'s name', '⚠️');
-        return;
+        return null;
+    }
+    const cleanName = name.trim();
+
+    if (!groupOrder) {
+        groupOrder = {
+            active: true,
+            roomCode: 'FOOD-' + Math.floor(1000 + Math.random() * 9000),
+            splitMode: 'itemized',
+            members: [
+                { id: 'm_host', name: 'You (Host)', avatar: '👑', isHost: true, includedInSplit: true }
+            ]
+        };
+    }
+
+    if (!Array.isArray(groupOrder.members)) {
+        groupOrder.members = [];
+    }
+
+    // Check if friend name already exists
+    const existing = groupOrder.members.find(m => m.name.toLowerCase() === cleanName.toLowerCase());
+    if (existing) {
+        showToast(`${cleanName} is already in the group!`, 'ℹ️');
+        existing.includedInSplit = true;
+        saveGroupOrder(groupOrder);
+        renderGroupMembersList();
+        renderSplitParticipantsChips();
+        const splitResult = calculateBillSplit();
+        renderFriendSplitCards(splitResult);
+        return existing.id;
     }
 
     const usedAvatars = groupOrder.members.map(m => m.avatar);
@@ -2516,17 +2543,57 @@ function addGroupMemberFromInput() {
     const avatar = availableAvatars.length > 0 ? availableAvatars[0] : '👤';
 
     const newId = 'm_' + Date.now();
-    groupOrder.members.push({
+    const newMember = {
         id: newId,
-        name: name,
+        name: cleanName,
         avatar: avatar,
-        isHost: false
-    });
+        isHost: false,
+        includedInSplit: true
+    };
 
+    groupOrder.members.push(newMember);
+    groupOrder.active = true;
     saveGroupOrder(groupOrder);
-    input.value = '';
+
+    // Refresh all friend views across the app
     renderGroupMembersList();
-    showToast(`Added ${name} to group order!`, '🎉');
+    renderSplitParticipantsChips();
+    const splitResult = calculateBillSplit();
+    renderFriendSplitCards(splitResult);
+
+    // Update cart page if open
+    if (document.getElementById('cart-items-list')) {
+        renderCartPage();
+    }
+
+    // Update checkout summary if open
+    if (document.getElementById('checkout-items-summary')) {
+        renderCheckoutBillSummary();
+    }
+
+    // Update bill modal badges if open
+    const roomBadge = document.getElementById('split-modal-room-badge');
+    if (roomBadge && groupOrder.roomCode) roomBadge.textContent = `ROOM #${groupOrder.roomCode}`;
+    const totalEl = document.getElementById('split-reconciled-total');
+    if (totalEl && splitResult) totalEl.textContent = `Total Bill: ₹${splitResult.grandTotal}`;
+
+    showToast(`Added ${cleanName} to group!`, '🎉');
+    return newId;
+}
+
+function addGroupMemberFromInput() {
+    const input = document.getElementById('new-member-name-input');
+    let name = input ? input.value.trim() : '';
+    if (!name) {
+        name = prompt("Enter your friend's name (e.g. Rahul, Priya, Rohan):");
+        if (!name || !name.trim()) return;
+        name = name.trim();
+    }
+
+    const newId = addNewFriend(name);
+    if (newId && input) {
+        input.value = '';
+    }
 }
 
 function removeGroupMember(id) {
@@ -2550,10 +2617,16 @@ function removeGroupMember(id) {
 
     saveGroupOrder(groupOrder);
     renderGroupMembersList();
+    renderSplitParticipantsChips();
+    const splitResult = calculateBillSplit();
+    renderFriendSplitCards(splitResult);
     showToast(`Removed ${target.name}`, '🗑️');
 
     if (document.getElementById('cart-items-list')) {
         renderCartPage();
+    }
+    if (document.getElementById('checkout-items-summary')) {
+        renderCheckoutBillSummary();
     }
 }
 
@@ -2609,6 +2682,26 @@ function assignCartItemMember(menuItemId, memberId) {
     renderCartPage();
 }
 
+function handleCartItemMemberChange(menuItemId, value, selectEl) {
+    if (value === '__ADD_NEW__') {
+        const name = prompt("Enter friend's name to assign this dish to:");
+        if (name && name.trim()) {
+            const newMemberId = addNewFriend(name.trim());
+            if (newMemberId) {
+                assignCartItemMember(menuItemId, newMemberId);
+                return;
+            }
+        }
+        // Revert select if cancelled
+        if (selectEl) {
+            const item = cart.find(i => i.menuItemId === menuItemId);
+            selectEl.value = item && item.assignedTo ? item.assignedTo : 'shared';
+        }
+    } else {
+        assignCartItemMember(menuItemId, value);
+    }
+}
+
 // --- Selectable Friends & Quick Add Logic in Bill Splitter ---
 
 function renderSplitParticipantsChips() {
@@ -2652,54 +2745,25 @@ function toggleMemberSplitInclusion(memberId, isChecked) {
 }
 
 function toggleSplitQuickAddFriend() {
-    const form = document.getElementById('split-quick-add-form');
-    const input = document.getElementById('split-quick-add-input');
-    if (!form) return;
-    form.classList.toggle('d-none');
-    if (!form.classList.contains('d-none') && input) {
-        input.focus();
-    }
+    addSplitFriendQuick();
 }
 
 function addSplitFriendQuick() {
     const input = document.getElementById('split-quick-add-input');
-    if (!input) return;
-    const name = input.value.trim();
+    let name = input ? input.value.trim() : '';
     if (!name) {
-        showToast('Please enter a friend\'s name', '⚠️');
-        return;
+        name = prompt("Enter your friend's name (e.g. Rahul, Priya, Rohan):");
+        if (!name || !name.trim()) return;
+        name = name.trim();
     }
 
-    const usedAvatars = groupOrder.members.map(m => m.avatar);
-    const availableAvatars = AVATAR_POOL.filter(a => !usedAvatars.includes(a));
-    const avatar = availableAvatars.length > 0 ? availableAvatars[0] : '👤';
+    const newId = addNewFriend(name);
+    if (newId && input) {
+        input.value = '';
+    }
 
-    const newId = 'm_' + Date.now();
-    groupOrder.members.push({
-        id: newId,
-        name: name,
-        avatar: avatar,
-        isHost: false,
-        includedInSplit: true
-    });
-
-    saveGroupOrder(groupOrder);
-    input.value = '';
-    
-    // Hide inline form
     const form = document.getElementById('split-quick-add-form');
     if (form) form.classList.add('d-none');
-
-    renderSplitParticipantsChips();
-    const splitResult = calculateBillSplit();
-    renderFriendSplitCards(splitResult);
-
-    // Also update cart page dish dropdowns so the new friend is selectable for dishes!
-    if (document.getElementById('cart-items-list')) {
-        renderCartPage();
-    }
-
-    showToast(`Added ${name} to bill split!`, '🎉');
 }
 
 function calculateBillSplit(orderContext = null) {

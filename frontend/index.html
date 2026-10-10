@@ -1446,12 +1446,45 @@
             }
         }
 
-        // Change location prompt
+        // Change location modal launcher
         function promptChangeLocation() {
-            const newLoc = prompt('Enter your delivery area/address:', 'Bellandur, Bengaluru');
-            if (newLoc && newLoc.trim()) {
-                document.getElementById('current-location-text').innerHTML = `${escapeHTML(newLoc.trim())} <span>▾</span>`;
-                showToast(`Delivery location updated to ${newLoc.trim()}`, '📍');
+            const modalEl = document.getElementById('changeLocationModal');
+            if (modalEl && typeof bootstrap !== 'undefined') {
+                const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
+                modal.show();
+            }
+        }
+
+        function selectQuickLocation(locName) {
+            applyNewDeliveryLocation(locName);
+        }
+
+        function saveCustomLocationModal() {
+            const input = document.getElementById('custom-location-input');
+            const loc = input ? input.value.trim() : '';
+            if (!loc) {
+                alert('Please enter a valid delivery location');
+                return;
+            }
+            applyNewDeliveryLocation(loc);
+        }
+
+        function applyNewDeliveryLocation(loc) {
+            localStorage.setItem('userDeliveryLocation', loc);
+            const locEl = document.getElementById('current-location-text');
+            if (locEl) {
+                locEl.innerHTML = `${escapeHTML(loc)} <span>▾</span>`;
+            }
+            showToast(`Delivery location set to ${loc}`, '📍');
+
+            const modalEl = document.getElementById('changeLocationModal');
+            if (modalEl && typeof bootstrap !== 'undefined') {
+                const modal = bootstrap.Modal.getInstance(modalEl);
+                if (modal) modal.hide();
+                document.querySelectorAll('.modal-backdrop').forEach(el => el.remove());
+                document.body.classList.remove('modal-open');
+                document.body.style.removeProperty('padding-right');
+                document.body.style.removeProperty('overflow');
             }
         }
 
@@ -1460,7 +1493,53 @@
             if (typeof updateNavbar === 'function') {
                 updateNavbar();
             }
+            const savedLoc = localStorage.getItem('userDeliveryLocation');
+            if (savedLoc) {
+                const locEl = document.getElementById('current-location-text');
+                if (locEl) locEl.innerHTML = `${escapeHTML(savedLoc)} <span>▾</span>`;
+            }
         });
     </script>
+
+    <!-- Modal: Change Delivery Location -->
+    <div class="modal fade" id="changeLocationModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content rounded-4 border-0 p-3 shadow-lg">
+                <div class="modal-header border-0 pb-0">
+                    <div>
+                        <h5 class="modal-title fw-bold">📍 Change Delivery Location</h5>
+                        <small class="text-muted">Select your delivery zone for fast arrival</small>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form onsubmit="event.preventDefault(); saveCustomLocationModal();">
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold text-muted">Enter Delivery Area / Landmark</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-white border-end-0">🔍</span>
+                                <input type="text" id="custom-location-input" class="form-control border-start-0 rounded-end-3" placeholder="Type area (e.g. Koramangala, Bengaluru)">
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold text-muted mb-2">Popular Fast-Delivery Hubs</label>
+                            <div class="d-flex flex-wrap gap-2">
+                                <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill px-3" onclick="selectQuickLocation('Gachibowli, Hyderabad')">📍 Gachibowli, Hyderabad</button>
+                                <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill px-3" onclick="selectQuickLocation('Bellandur, Bengaluru')">📍 Bellandur, Bengaluru</button>
+                                <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill px-3" onclick="selectQuickLocation('Koramangala, Bengaluru')">📍 Koramangala, Bengaluru</button>
+                                <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill px-3" onclick="selectQuickLocation('Indiranagar, Bengaluru')">📍 Indiranagar, Bengaluru</button>
+                                <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill px-3" onclick="selectQuickLocation('HSR Layout, Bengaluru')">📍 HSR Layout, Bengaluru</button>
+                                <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill px-3" onclick="selectQuickLocation('Whitefield, Bengaluru')">📍 Whitefield, Bengaluru</button>
+                                <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill px-3" onclick="selectQuickLocation('Jubilee Hills, Hyderabad')">📍 Jubilee Hills, Hyderabad</button>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-foodie-explore w-100 py-2 rounded-3">Confirm Delivery Area ➔</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

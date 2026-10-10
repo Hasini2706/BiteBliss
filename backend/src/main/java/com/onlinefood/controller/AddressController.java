@@ -26,6 +26,11 @@ public class AddressController {
         return new ResponseEntity<>(addressService.addAddress(userId, address), HttpStatus.CREATED);
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<Address> updateAddress(@PathVariable Long id, @RequestBody Address address) {
+        return ResponseEntity.ok(addressService.updateAddress(id, address));
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteAddress(@PathVariable Long id) {
         addressService.deleteAddress(id);

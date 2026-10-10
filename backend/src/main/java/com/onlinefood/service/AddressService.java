@@ -49,6 +49,19 @@ public class AddressService {
         return addressRepository.save(address);
     }
 
+    public Address updateAddress(Long id, Address updated) {
+        Address existing = getAddressById(id);
+        if (updated.getFullName() != null) existing.setFullName(updated.getFullName());
+        if (updated.getPhone() != null) existing.setPhone(updated.getPhone());
+        if (updated.getAddressLine1() != null) existing.setAddressLine1(updated.getAddressLine1());
+        if (updated.getAddressLine2() != null) existing.setAddressLine2(updated.getAddressLine2());
+        if (updated.getCity() != null) existing.setCity(updated.getCity());
+        if (updated.getState() != null) existing.setState(updated.getState());
+        if (updated.getPincode() != null) existing.setPincode(updated.getPincode());
+        if (updated.getType() != null) existing.setType(updated.getType());
+        return addressRepository.save(existing);
+    }
+
     public void deleteAddress(Long id) {
         addressRepository.deleteById(id);
     }

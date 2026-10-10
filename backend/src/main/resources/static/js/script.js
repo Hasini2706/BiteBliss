@@ -1037,6 +1037,9 @@ function renderCheckoutBillSummary() {
     renderCheckoutQuickCoupons(subtotal);
 }
 
+let userAddressesCache = [];
+let editingAddressId = null;
+
 async function fetchUserAddresses() {
     const list = document.getElementById('address-cards-container');
     if (!list) return;
@@ -1082,24 +1085,53 @@ async function fetchUserAddresses() {
             ];
         }
 
-        addresses.forEach((addr, idx) => {
-            const isSelected = idx === 0;
-            if (idx === 0) selectedAddressId = addr.id;
+        userAddressesCache = addresses;
 
+        // Restore previously selected address or default to first
+        const savedAddrId = localStorage.getItem('selectedAddressId');
+        if (savedAddrId && addresses.some(a => String(a.id) === String(savedAddrId))) {
+            selectedAddressId = Number(savedAddrId);
+        } else if (!selectedAddressId || !addresses.some(a => a.id === selectedAddressId)) {
+            selectedAddressId = addresses[0].id;
+            localStorage.setItem('selectedAddressId', selectedAddressId);
+        }
+
+        addresses.forEach((addr) => {
+            const isSelected = addr.id === selectedAddressId;
             const icon = addr.type === 'Work' ? '💼' : (addr.type === 'Home' ? '🏠' : '📍');
+
             list.innerHTML += `
-                <div class="card mb-3 address-select-card ${isSelected ? 'border-primary shadow-sm' : ''}" style="cursor: pointer; transition: all 0.2s;" onclick="selectAddress(${addr.id}, this)">
+                <div class="card mb-3 address-select-card ${isSelected ? 'border-primary shadow-sm bg-white' : 'border'}" 
+                     style="cursor: pointer; transition: all 0.2s; border-width: ${isSelected ? '2px' : '1px'} !important;" 
+                     onclick="selectAddress(${addr.id}, this)">
                     <div class="card-body py-3">
                         <div class="form-check d-flex align-items-start gap-2">
                             <input class="form-check-input mt-1" type="radio" name="addressOption" id="addr-${addr.id}" value="${addr.id}" ${isSelected ? 'checked' : ''}>
                             <label class="form-check-label w-100" for="addr-${addr.id}" style="cursor: pointer;">
-                                <div class="d-flex align-items-center justify-content-between">
-                                    <span class="fw-bold fs-6 text-dark">${icon} ${escapeHTML(addr.type || 'Home')}</span>
+                                <div class="d-flex align-items-center justify-content-between mb-1">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <span class="fw-bold fs-6 text-dark">${icon} ${escapeHTML(addr.type || 'Home')}</span>
+                                        ${isSelected ? '<span class="badge bg-primary rounded-pill px-2 py-1 small">✓ DELIVER HERE</span>' : ''}
+                                    </div>
                                     <span class="badge bg-light text-dark border">${escapeHTML(addr.phone || '9876543210')}</span>
                                 </div>
-                                <div class="fw-semibold mt-1 text-dark">${escapeHTML(addr.fullName || currentUser.name)}</div>
-                                <small class="text-muted">${escapeHTML(addr.addressLine1)}, ${escapeHTML(addr.addressLine2 || '')}, ${escapeHTML(addr.city)}, ${escapeHTML(addr.state)} - ${escapeHTML(addr.pincode)}</small>
+                                <div class="fw-semibold text-dark">${escapeHTML(addr.fullName || currentUser.name)}</div>
+                                <small class="text-muted d-block mt-1">
+                                    ${escapeHTML(addr.addressLine1)}${addr.addressLine2 ? ', ' + escapeHTML(addr.addressLine2) : ''}, ${escapeHTML(addr.city)}, ${escapeHTML(addr.state)} - <strong>${escapeHTML(addr.pincode)}</strong>
+                                </small>
                             </label>
+                        </div>
+                        <div class="d-flex justify-content-end gap-2 mt-2 pt-2 border-top">
+                            <button type="button" class="btn btn-sm btn-outline-primary rounded-pill px-3 py-1 small" 
+                                    onclick="event.stopPropagation(); openEditAddressModal(${addr.id})">
+                                ✏️ Change / Edit Address
+                            </button>
+                            ${addresses.length > 1 ? `
+                            <button type="button" class="btn btn-sm btn-outline-danger rounded-pill px-2 py-1 small" 
+                                    onclick="event.stopPropagation(); deleteAddress(${addr.id})">
+                                🗑️ Delete
+                            </button>
+                            ` : ''}
                         </div>
                     </div>
                 </div>
@@ -1112,11 +1144,129 @@ async function fetchUserAddresses() {
 
 function selectAddress(id, cardEl) {
     selectedAddressId = id;
-    document.querySelectorAll('.address-select-card').forEach(c => c.classList.remove('border-primary', 'shadow-sm'));
+    localStorage.setItem('selectedAddressId', id);
+    document.querySelectorAll('.address-select-card').forEach(c => {
+        c.classList.remove('border-primary', 'shadow-sm');
+        c.style.borderWidth = '1px';
+    });
     if (cardEl) {
         cardEl.classList.add('border-primary', 'shadow-sm');
+        cardEl.style.borderWidth = '2px';
         const radio = cardEl.querySelector('input[type="radio"]');
         if (radio) radio.checked = true;
+    }
+    showToast('Delivery address selected! 🏠');
+}
+
+function openEditAddressModal(addressId) {
+    editingAddressId = addressId;
+    const addr = userAddressesCache.find(a => a.id === addressId);
+    if (!addr) {
+        alert('Address details not found');
+        return;
+    }
+
+    // Populate Edit Modal inputs
+    const setVal = (id, val) => {
+        const el = document.getElementById(id);
+        if (el) el.value = val || '';
+    };
+
+    setVal('edit-addr-id', addr.id);
+    setVal('edit-addr-name', addr.fullName || currentUser?.name || '');
+    setVal('edit-addr-phone', addr.phone || currentUser?.phone || '');
+    setVal('edit-addr-line1', addr.addressLine1 || '');
+    setVal('edit-addr-line2', addr.addressLine2 || '');
+    setVal('edit-addr-city', addr.city || 'Bengaluru');
+    setVal('edit-addr-state', addr.state || 'Karnataka');
+    setVal('edit-addr-pincode', addr.pincode || '');
+    setVal('edit-addr-type', addr.type || 'Home');
+
+    const modalEl = document.getElementById('editAddressModal');
+    if (modalEl && typeof bootstrap !== 'undefined') {
+        const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
+        modal.show();
+    }
+}
+
+async function saveEditedAddressModal() {
+    if (!editingAddressId) return;
+
+    const fullName = document.getElementById('edit-addr-name')?.value.trim();
+    const phone = document.getElementById('edit-addr-phone')?.value.trim();
+    const line1 = document.getElementById('edit-addr-line1')?.value.trim();
+    const line2 = document.getElementById('edit-addr-line2')?.value.trim() || '';
+    const city = document.getElementById('edit-addr-city')?.value.trim() || 'Bengaluru';
+    const state = document.getElementById('edit-addr-state')?.value.trim() || 'Karnataka';
+    const pincode = document.getElementById('edit-addr-pincode')?.value.trim();
+    const type = document.getElementById('edit-addr-type')?.value || 'Home';
+
+    if (!fullName || !phone || !line1 || !pincode) {
+        alert('Please fill out all required address fields.');
+        return;
+    }
+
+    try {
+        const response = await fetchWithAuth(`${API_URL}/addresses/${editingAddressId}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ fullName, phone, addressLine1: line1, addressLine2: line2, city, state, pincode, type })
+        });
+
+        if (response.ok) {
+            showToast('Delivery address updated successfully! ✏️🏠');
+            const modalEl = document.getElementById('editAddressModal');
+            if (modalEl) {
+                const modal = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl);
+                if (modal) modal.hide();
+                document.querySelectorAll('.modal-backdrop').forEach(el => el.remove());
+                document.body.classList.remove('modal-open');
+                document.body.style.removeProperty('padding-right');
+                document.body.style.removeProperty('overflow');
+            }
+
+            selectedAddressId = editingAddressId;
+            localStorage.setItem('selectedAddressId', selectedAddressId);
+
+            if (document.getElementById('address-cards-container')) {
+                await fetchUserAddresses();
+            }
+            if (document.getElementById('profile-address-list')) {
+                await fetchProfileAddresses();
+            }
+        } else {
+            alert('Failed to update address. Please check details.');
+        }
+    } catch (e) {
+        alert('Network error updating address');
+    }
+}
+
+async function deleteAddress(addressId) {
+    if (!confirm('Are you sure you want to delete this delivery address?')) return;
+
+    try {
+        const response = await fetchWithAuth(`${API_URL}/addresses/${addressId}`, {
+            method: 'DELETE'
+        });
+
+        if (response.ok || response.status === 204) {
+            showToast('Address removed successfully! 🗑️');
+            if (selectedAddressId === addressId) {
+                selectedAddressId = null;
+                localStorage.removeItem('selectedAddressId');
+            }
+            if (document.getElementById('address-cards-container')) {
+                await fetchUserAddresses();
+            }
+            if (document.getElementById('profile-address-list')) {
+                await fetchProfileAddresses();
+            }
+        } else {
+            showToast('Could not delete address', '⚠️');
+        }
+    } catch (e) {
+        showToast('Network error deleting address', '⚠️');
     }
 }
 
@@ -1143,7 +1293,8 @@ async function saveNewAddressModal() {
         });
 
         if (response.ok) {
-            showToast('Delivery address added successfully!', '🏠');
+            const created = await response.json();
+            showToast('Delivery address added successfully! 🏠');
             const modalEl = document.getElementById('addAddressModal');
             if (modalEl) {
                 const modal = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl);
@@ -1153,6 +1304,12 @@ async function saveNewAddressModal() {
                 document.body.style.removeProperty('padding-right');
                 document.body.style.removeProperty('overflow');
             }
+
+            if (created && created.id) {
+                selectedAddressId = created.id;
+                localStorage.setItem('selectedAddressId', selectedAddressId);
+            }
+
             if (document.getElementById('address-cards-container')) {
                 await fetchUserAddresses();
             }
@@ -1166,6 +1323,7 @@ async function saveNewAddressModal() {
         alert('Network error saving address');
     }
 }
+
 
 const DEFAULT_COUPONS = [
     { id: 1, code: 'SWIGGY50', discountAmount: 100, minOrderAmount: 199, description: '50% OFF up to ₹100' },
@@ -1878,17 +2036,26 @@ async function fetchProfileAddresses() {
 
             addresses.forEach(addr => {
                 list.innerHTML += `
-                    <div class="card mb-2 border-0 shadow-sm rounded-3">
+                    <div class="card mb-3 border shadow-sm rounded-3">
                         <div class="card-body p-3 d-flex justify-content-between align-items-center">
                             <div>
-                                <span class="badge bg-primary me-2">${escapeHTML(addr.type)}</span>
-                                <strong>${escapeHTML(addr.fullName)}</strong> (${escapeHTML(addr.phone)})<br>
-                                <small class="text-muted">${escapeHTML(addr.addressLine1)}, ${escapeHTML(addr.city)} - ${escapeHTML(addr.pincode)}</small>
+                                <span class="badge bg-primary me-2">${escapeHTML(addr.type || 'Home')}</span>
+                                <strong>${escapeHTML(addr.fullName || currentUser.name)}</strong> (${escapeHTML(addr.phone || '9876543210')})<br>
+                                <small class="text-muted">${escapeHTML(addr.addressLine1)}${addr.addressLine2 ? ', ' + escapeHTML(addr.addressLine2) : ''}, ${escapeHTML(addr.city)}, ${escapeHTML(addr.state || '')} - <strong>${escapeHTML(addr.pincode)}</strong></small>
+                            </div>
+                            <div class="d-flex gap-2">
+                                <button type="button" class="btn btn-sm btn-outline-primary rounded-pill px-3" onclick="openEditAddressModal(${addr.id})">
+                                    ✏️ Edit
+                                </button>
+                                <button type="button" class="btn btn-sm btn-outline-danger rounded-pill px-2" onclick="deleteAddress(${addr.id})">
+                                    🗑️
+                                </button>
                             </div>
                         </div>
                     </div>
                 `;
             });
+            userAddressesCache = addresses;
         }
     } catch (e) {}
 }

@@ -322,6 +322,62 @@
         </div>
     </div>
 
+    <!-- Modal: Edit / Change Address -->
+    <div class="modal fade" id="editAddressModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content rounded-4 border-0 p-3 shadow-lg">
+                <div class="modal-header border-0 pb-0">
+                    <h5 class="modal-title fw-bold">✏️ Change / Edit Delivery Address</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form onsubmit="event.preventDefault(); saveEditedAddressModal();">
+                        <input type="hidden" id="edit-addr-id">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold">Full Name</label>
+                                <input type="text" id="edit-addr-name" class="form-control rounded-3" required placeholder="John Doe">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label small fw-bold">Phone Number</label>
+                                <input type="tel" id="edit-addr-phone" class="form-control rounded-3" required placeholder="9876543210">
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label small fw-bold">Flat / House No / Building</label>
+                                <input type="text" id="edit-addr-line1" class="form-control rounded-3" required placeholder="Apt 304, Sunshine Towers">
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label small fw-bold">Area / Street</label>
+                                <input type="text" id="edit-addr-line2" class="form-control rounded-3" placeholder="Outer Ring Road, Bellandur">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label small fw-bold">City</label>
+                                <input type="text" id="edit-addr-city" class="form-control rounded-3" required value="Bengaluru">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label small fw-bold">State</label>
+                                <input type="text" id="edit-addr-state" class="form-control rounded-3" value="Karnataka">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label small fw-bold">Pincode</label>
+                                <input type="text" id="edit-addr-pincode" class="form-control rounded-3" required placeholder="560103">
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label small fw-bold">Save as</label>
+                                <select id="edit-addr-type" class="form-select rounded-3">
+                                    <option value="Home">🏠 Home</option>
+                                    <option value="Work">💼 Work</option>
+                                    <option value="Other">📍 Other</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-foodie-explore w-100 mt-4 py-2">Save Changes & Deliver Here</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Modal: Payment Processing Simulator -->
     <div class="modal fade" id="paymentProcessingModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
         <div class="modal-dialog modal-dialog-centered">

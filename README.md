@@ -205,10 +205,10 @@ docker compose up -d --build
 
 Built by the Department of Artificial Intelligence and Machine Learning, Aditya University (Batch 21, *API & Microservices*):
 
-- K. Swarna (24B11AI151)
-- K. Sasi Meghana (24B11AI194)
-- M. Tejo Hasini (24B11AI223)
-- O. Bheemeswari (24B11AI305)
+- K. Swarna
+- K. Sasi Meghana
+- M. Tejo Hasini
+- O. Bheemeswari
 
 ---
 

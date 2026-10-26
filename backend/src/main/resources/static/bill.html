@@ -188,16 +188,21 @@
                     </div>
 
                     <!-- Real Local Street Live GPS Map (Leaflet) with fallback -->
-                    <div class="position-relative rounded-4 overflow-hidden mb-3 border shadow-sm" style="height: 280px; background: #f8fafc;">
-                        <div id="leaflet-delivery-map" style="width: 100%; height: 280px; z-index: 1;"></div>
+                    <div class="position-relative rounded-4 overflow-hidden mb-3 border shadow-sm" style="height: 320px; background: #f8fafc;">
+                        <div id="leaflet-delivery-map" style="width: 100%; height: 320px; z-index: 1;"></div>
                         
+                        <!-- Recenter Button -->
+                        <button type="button" class="btn btn-sm btn-light bg-white border rounded-pill position-absolute top-0 end-0 m-2 px-2 py-1 shadow-sm d-flex align-items-center gap-1" style="z-index: 500; font-size: 0.75rem;" onclick="recenterDeliveryMap()" title="Recenter on delivery route">
+                            <span>🎯</span> <strong>Recenter</strong>
+                        </button>
+
                         <!-- Telemetry Badge (Over the map) -->
                         <div class="position-absolute bottom-0 start-0 m-3 px-3 py-1 bg-white bg-opacity-95 rounded-pill shadow-sm border small d-flex align-items-center gap-2" style="z-index: 500;">
                             <span>🛵 Rahul Sharma</span>
                             <span class="text-muted">•</span>
                             <span class="text-success fw-bold" id="rider-speed">28 km/h</span>
                             <span class="text-muted">•</span>
-                            <span class="text-secondary" id="rider-distance">1.2 km away</span>
+                            <span class="text-secondary" id="rider-distance">1.6 km away</span>
                         </div>
                     </div>
 
@@ -562,27 +567,62 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="js/script.js"></script>
     <script>
+        let deliveryMapInstance = null;
+        let deliveryRouteBounds = null;
+
         document.addEventListener('DOMContentLoaded', function() {
             setTimeout(initDeliveryMap, 300);
         });
+
+        function recenterDeliveryMap() {
+            if (deliveryMapInstance && deliveryRouteBounds) {
+                deliveryMapInstance.fitBounds(deliveryRouteBounds, { padding: [45, 45], maxZoom: 16 });
+            }
+        }
 
         function initDeliveryMap() {
             const mapContainer = document.getElementById('leaflet-delivery-map');
             if (!mapContainer || typeof L === 'undefined') return;
 
-            // Restaurant & Customer local street coordinates (Bellandur, Bengaluru)
-            const restaurantPos = [12.9360, 77.6810]; // Cloud Kitchen, Outer Ring Road
-            const customerPos = [12.9275, 77.6710];   // #42, Green Glen Layout, Bellandur
+            // Real city street nodes entirely on land (Bellandur Outer Ring Road & Green Glen Layout)
+            // Stays strictly south of Bellandur Lake across actual paved streets
+            const streetNodes = [
+                [12.9268, 77.6815], // BiteBliss Kitchen Hub (Outer Ring Road Service Rd, Bellandur)
+                [12.9270, 77.6792], // Service Road approaching Bellandur Junction
+                [12.9274, 77.6772], // Bellandur Junction / Flyover crossover
+                [12.9282, 77.6756], // Margosa Ave Entrance (Gate to Green Glen Layout)
+                [12.9287, 77.6740], // Margosa Avenue straight passing Sobha Iris
+                [12.9283, 77.6724], // Margosa Ave turning towards 4th Cross
+                [12.9278, 77.6715], // 4th Cross connecting lane
+                [12.9275, 77.6710]  // Customer Doorstep (#42, 4th Cross, Green Glen Layout)
+            ];
 
-            const midLat = (restaurantPos[0] + customerPos[0]) / 2;
-            const midLng = (restaurantPos[1] + customerPos[1]) / 2;
+            // Sub-interpolate 4 micro-waypoints per road segment for silky smooth movement
+            const routeWaypoints = [];
+            const SUB_STEPS = 4;
+            for (let i = 0; i < streetNodes.length - 1; i++) {
+                const start = streetNodes[i];
+                const end = streetNodes[i + 1];
+                for (let s = 0; s < SUB_STEPS; s++) {
+                    const ratio = s / SUB_STEPS;
+                    routeWaypoints.push([
+                        start[0] + (end[0] - start[0]) * ratio,
+                        start[1] + (end[1] - start[1]) * ratio
+                    ]);
+                }
+            }
+            routeWaypoints.push(streetNodes[streetNodes.length - 1]);
+
+            const startPos = streetNodes[0];
+            const endPos = streetNodes[streetNodes.length - 1];
 
             const map = L.map('leaflet-delivery-map', {
-                center: [midLat, midLng],
+                center: [(startPos[0] + endPos[0]) / 2, (startPos[1] + endPos[1]) / 2],
                 zoom: 15,
                 zoomControl: false,
                 attributionControl: false
             });
+            deliveryMapInstance = map;
 
             L.control.zoom({ position: 'topright' }).addTo(map);
 
@@ -590,73 +630,104 @@
                 maxZoom: 19
             }).addTo(map);
 
-            // Custom HTML Icons
+            // Custom HTML Markers
             const restIcon = L.divIcon({
-                html: '<div style="background:#ff4500; color:white; width:36px; height:36px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:18px; box-shadow:0 3px 10px rgba(0,0,0,0.3); border:2px solid white;">🏪</div>',
+                html: '<div style="background:#ea580c; color:white; width:36px; height:36px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:18px; box-shadow:0 3px 12px rgba(234,88,12,0.5); border:2.5px solid white;">🏪</div>',
                 className: '',
                 iconSize: [36, 36],
                 iconAnchor: [18, 18]
             });
 
             const homeIcon = L.divIcon({
-                html: '<div style="background:#10b981; color:white; width:36px; height:36px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:18px; box-shadow:0 3px 10px rgba(0,0,0,0.3); border:2px solid white;">🏠</div>',
+                html: '<div style="background:#10b981; color:white; width:36px; height:36px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:18px; box-shadow:0 3px 12px rgba(16,185,129,0.5); border:2.5px solid white;">🏠</div>',
                 className: '',
                 iconSize: [36, 36],
                 iconAnchor: [18, 18]
             });
 
             const riderIcon = L.divIcon({
-                html: '<div id="live-rider-icon" style="background:#ff6600; color:white; width:44px; height:44px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:22px; box-shadow:0 4px 14px rgba(255,102,0,0.6); border:3px solid white; transition: all 1s ease-in-out;">🛵</div>',
+                html: '<div id="live-rider-icon" style="background:#ff6600; color:white; width:44px; height:44px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:22px; box-shadow:0 0 16px rgba(255,102,0,0.85); border:3px solid white; transition: transform 0.4s ease-out;">🛵</div>',
                 className: '',
                 iconSize: [44, 44],
                 iconAnchor: [22, 22]
             });
 
-            L.marker(restaurantPos, { icon: restIcon }).addTo(map).bindPopup("<strong>Kitchen</strong><br>Food Prepared & Dispatched");
-            L.marker(customerPos, { icon: homeIcon }).addTo(map).bindPopup("<strong>Your Address</strong><br>Green Glen Layout, Bengaluru");
+            L.marker(startPos, { icon: restIcon }).addTo(map).bindPopup("<strong>BiteBliss Kitchen Hub</strong><br>Outer Ring Road, Bellandur");
+            L.marker(endPos, { icon: homeIcon }).addTo(map).bindPopup("<strong>Your Address</strong><br>#42, 4th Cross, Green Glen Layout, Bengaluru");
 
-            // Road route waypoints along actual city streets
-            const routeWaypoints = [
-                [12.9360, 77.6810],
-                [12.9348, 77.6785],
-                [12.9330, 77.6755],
-                [12.9305, 77.6732],
-                [12.9288, 77.6718],
-                [12.9275, 77.6710]
-            ];
-
-            const routeLine = L.polyline(routeWaypoints, {
-                color: '#ff4500',
+            // Road Polyline along actual streets
+            const routeLine = L.polyline(streetNodes, {
+                color: '#ea580c',
                 weight: 5,
                 opacity: 0.85,
                 dashArray: '8, 8',
-                lineCap: 'round'
+                lineCap: 'round',
+                lineJoin: 'round'
             }).addTo(map);
 
-            map.fitBounds(routeLine.getBounds(), { padding: [40, 40] });
+            deliveryRouteBounds = routeLine.getBounds();
+            map.fitBounds(deliveryRouteBounds, { padding: [45, 45], maxZoom: 16 });
 
-            let currentStep = 1;
-            const riderMarker = L.marker(routeWaypoints[currentStep], { icon: riderIcon }).addTo(map);
-            riderMarker.bindPopup("<strong>Delivery Partner: Rahul Sharma</strong><br>Speed: 28 km/h • 1.2 km away");
+            setTimeout(() => map.invalidateSize(), 400);
 
-            let forward = true;
+            let currentStep = 0;
+            const riderMarker = L.marker(routeWaypoints[0], { icon: riderIcon }).addTo(map);
+            riderMarker.bindPopup("<strong>Delivery Partner: Rahul Sharma</strong><br>Vehicle: KA 01 EK 4291<br>Speed: 28 km/h • 1.6 km away");
+
+            const totalSteps = routeWaypoints.length - 1;
+            let isAtDoorstep = false;
+
             setInterval(() => {
-                if (forward) {
-                    currentStep++;
-                    if (currentStep >= routeWaypoints.length - 1) forward = false;
-                } else {
-                    currentStep--;
-                    if (currentStep <= 1) forward = true;
+                if (isAtDoorstep) return;
+
+                currentStep++;
+                if (currentStep >= totalSteps) {
+                    currentStep = totalSteps;
+                    isAtDoorstep = true;
+
+                    riderMarker.setLatLng(routeWaypoints[currentStep]);
+                    
+                    const etaEl = document.getElementById('live-eta-counter');
+                    if (etaEl) {
+                        etaEl.innerHTML = '<span class="badge bg-success px-2 py-1">Arrived! 🔔</span>';
+                    }
+                    const distEl = document.getElementById('rider-distance');
+                    if (distEl) distEl.textContent = 'At your Doorstep (0 km)';
+                    const speedEl = document.getElementById('rider-speed');
+                    if (speedEl) speedEl.textContent = '0 km/h';
+
+                    // Pause at doorstep for 8 seconds, then restart trip
+                    setTimeout(() => {
+                        currentStep = 0;
+                        isAtDoorstep = false;
+                        riderMarker.setLatLng(routeWaypoints[0]);
+                        const resetEta = document.getElementById('live-eta-counter');
+                        if (resetEta) resetEta.textContent = '6 mins';
+                        const resetDist = document.getElementById('rider-distance');
+                        if (resetDist) resetDist.textContent = '1.6 km away';
+                        const resetSpeed = document.getElementById('rider-speed');
+                        if (resetSpeed) resetSpeed.textContent = '28 km/h';
+                    }, 8000);
+                    return;
                 }
+
                 riderMarker.setLatLng(routeWaypoints[currentStep]);
 
-                const distLeft = (0.2 + (routeWaypoints.length - 1 - currentStep) * 0.25).toFixed(1);
+                // Synchronized Real-Time Telemetry
+                const remainingRatio = (totalSteps - currentStep) / totalSteps;
+                const distLeftKm = (remainingRatio * 1.6).toFixed(1);
+                const etaMinutes = Math.max(1, Math.ceil(remainingRatio * 6));
+                const currentSpeed = currentStep > totalSteps - 6 ? Math.floor(14 + Math.random() * 5) : Math.floor(27 + Math.random() * 7);
+
+                const etaEl = document.getElementById('live-eta-counter');
+                if (etaEl) etaEl.textContent = `${etaMinutes} mins`;
+
                 const distEl = document.getElementById('rider-distance');
-                if (distEl) distEl.textContent = `${distLeft} km away`;
+                if (distEl) distEl.textContent = `${distLeftKm} km away`;
 
                 const speedEl = document.getElementById('rider-speed');
-                if (speedEl) speedEl.textContent = `${Math.floor(25 + Math.random() * 7)} km/h`;
-            }, 3200);
+                if (speedEl) speedEl.textContent = `${currentSpeed} km/h`;
+            }, 1800);
         }
     </script>
 </body>

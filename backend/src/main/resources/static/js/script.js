@@ -93,32 +93,60 @@ function showToast(message, icon = '🍽️') {
     }, 2800);
 }
 
+function isJwtExpired(token) {
+    if (!token || typeof token !== 'string') return true;
+    try {
+        const parts = token.split('.');
+        if (parts.length !== 3) return true;
+        const payloadBase64 = parts[1].replace(/-/g, '+').replace(/_/g, '/');
+        const jsonPayload = decodeURIComponent(atob(payloadBase64).split('').map(c => {
+            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
+        const payload = JSON.parse(jsonPayload);
+        if (!payload.exp) return false;
+        return Math.floor(Date.now() / 1000) >= (payload.exp - 15);
+    } catch (e) {
+        return true;
+    }
+}
+
+async function autoLoginUser() {
+    try {
+        let email = 'demo@food.com';
+        let pass = 'password123';
+        if (currentUser && currentUser.email) {
+            email = currentUser.email;
+            if (email === 'admin@food.com') {
+                pass = 'admin123';
+            }
+        }
+        const loginRes = await fetch(`${API_URL}/users/login`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email: email, password: pass })
+        });
+        if (loginRes.ok) {
+            const loginData = await loginRes.json();
+            if (loginData.accessToken) {
+                localStorage.setItem('token', loginData.accessToken);
+                currentUser = loginData.user;
+                localStorage.setItem('currentUser', JSON.stringify(loginData.user));
+                return loginData.accessToken;
+            }
+        }
+    } catch (e) {
+        console.warn('Auto-auth refresh failed:', e);
+    }
+    return null;
+}
+
 // =========================================================
 // Global Fetch Helper with JWT Token
 // =========================================================
 async function fetchWithAuth(url, options = {}) {
     let token = localStorage.getItem('token');
-    if (!token) {
-        try {
-            const loginRes = await fetch(`${API_URL}/users/login`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email: 'demo@food.com', password: 'password123' })
-            });
-            if (loginRes.ok) {
-                const loginData = await loginRes.json();
-                if (loginData.accessToken) {
-                    token = loginData.accessToken;
-                    localStorage.setItem('token', token);
-                    if (!localStorage.getItem('currentUser')) {
-                        currentUser = loginData.user;
-                        localStorage.setItem('currentUser', JSON.stringify(loginData.user));
-                    }
-                }
-            }
-        } catch (e) {
-            console.warn('Auto-auth fallback:', e);
-        }
+    if (!token || isJwtExpired(token)) {
+        token = await autoLoginUser();
     }
 
     const headers = options.headers ? { ...options.headers } : {};
@@ -126,10 +154,24 @@ async function fetchWithAuth(url, options = {}) {
         headers['Authorization'] = 'Bearer ' + token;
     }
     
-    return fetch(url, {
+    let res = await fetch(url, {
         ...options,
         headers: headers
     });
+
+    if (res.status === 401 || res.status === 403) {
+        localStorage.removeItem('token');
+        token = await autoLoginUser();
+        if (token) {
+            headers['Authorization'] = 'Bearer ' + token;
+            res = await fetch(url, {
+                ...options,
+                headers: headers
+            });
+        }
+    }
+
+    return res;
 }
 
 // =========================================================
@@ -1567,8 +1609,14 @@ async function processOrderPayment() {
                     window.location.href = `bill.html?orderId=${order.id}`;
                 }, 1200);
             } else {
-                const err = await response.json();
-                alert(`Order creation failed: ${err.message || 'Error'}`);
+                let err = {};
+                try {
+                    err = await response.json();
+                } catch (e) {
+                    err = { message: response.statusText };
+                }
+                const errorMsg = err.message || err.error || (response.status === 403 || response.status === 401 ? 'Session expired. Please retry.' : 'Server Error');
+                alert(`Order creation failed: ${errorMsg}`);
                 if (modalEl) {
                     const modal = bootstrap.Modal.getInstance(modalEl);
                     if (modal) modal.hide();

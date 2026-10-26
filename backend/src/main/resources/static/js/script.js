@@ -2,7 +2,9 @@
 // Mini Zomato / Swiggy - Core Frontend Engine
 // =========================================================
 
-const API_URL = 'http://localhost:8081/api';
+const API_URL = (window.location.protocol === 'file:' || window.location.port === '5500' || window.location.port === '5501' || window.location.port === '3000')
+    ? 'http://localhost:8081/api'
+    : `${window.location.origin}/api`;
 
 // Global State
 let currentUser = JSON.parse(localStorage.getItem('currentUser')) || null;

@@ -2,7 +2,9 @@
 // BiteBliss Admin Portal - Professional SaaS Engine
 // =========================================================
 
-const API_BASE = 'http://localhost:8081/api';
+const API_BASE = (window.location.protocol === 'file:' || window.location.port === '5500' || window.location.port === '5501' || window.location.port === '3000')
+    ? 'http://localhost:8081/api'
+    : `${window.location.origin}/api`;
 
 // Admin State
 let currentRevenueTimeframe = '7d';
